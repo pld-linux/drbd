@@ -13,6 +13,7 @@ Release:	%{rel}
 License:	GPL
 Group:		Base/Kernel
 Source0:	http://www.complang.tuwien.ac.at/reisner/drbd/download/%{name}-%{version}.tar.gz
+# Source0-md5:	b5c3e0ba931aac4577b8004166a515da
 Patch0:		%{name}-kernel24.patch
 URL:		http://www.complang.tuwien.ac.at/reisner/drbd/
 %{!?_without_dist_kernel:BuildRequires:	kernel-headers >= 2.2.20}
