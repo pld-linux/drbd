@@ -185,7 +185,7 @@ fi
 %defattr(644,root,root,755)
 %doc documentation/{HOWTO/*.html,*.txt}
 %attr(755,root,root) %{_sbindir}/drbdsetup
-%attr(755,root,root) /etc/rc.d/init.d/drbd
+%attr(754,root,root) /etc/rc.d/init.d/drbd
 %attr(755,root,root) %{_sysconfdir}/ha.d/resource.d/datadisk
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/drbd.conf
 %{_mandir}/man[58]/*
