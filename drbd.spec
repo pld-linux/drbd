@@ -8,7 +8,7 @@ Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl):	drbd jest urz±dzeniem blokowym dla klastrów o wysokiej niezawodno¶ci
 Name:		drbd
 Version:	0.5.8.1
-%define	rel	10
+%define	rel	11
 Release:	%{rel}
 License:	GPL
 Group:		Base/Kernel
@@ -146,8 +146,6 @@ ln -sf /etc/rc.d/init.d/drbd $RPM_BUILD_ROOT/etc/ha.d/resource.d/datadisk
 install documentation/drbd.conf.5 $RPM_BUILD_ROOT%{_mandir}/man5
 install documentation/drbdsetup.8 $RPM_BUILD_ROOT%{_mandir}/man8
 
-gzip -9nf ChangeLog README TODO
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -189,10 +187,10 @@ fi
 
 %files -n kernel-block-drbd
 %defattr(644,root,root,755)
-%doc *.gz
-/lib/modules/%{_kernel_ver}/misc/drbd.o
+%doc ChangeLog README TODO
+/lib/modules/%{_kernel_ver}/misc/*
 
 %files -n kernel-smp-block-drbd
 %defattr(644,root,root,755)
-%doc *.gz
-/lib/modules/%{_kernel_ver}smp/misc/drbd.o
+%doc ChangeLog README TODO
+/lib/modules/%{_kernel_ver}smp/misc/*
