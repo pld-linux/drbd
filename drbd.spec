@@ -1,10 +1,10 @@
 #
 # Conditional build:
-%bcond_without  dist_kernel     # allow non-distribution kernel
-%bcond_without  kernel          # don't build kernel modules
-%bcond_without  smp             # don't build SMP module
-%bcond_without  userspace       # don't build userspace module
-%bcond_with     verbose         # verbose build (V=1)
+%bcond_without	dist_kernel	# allow non-distribution kernel
+%bcond_without	kernel		# don't build kernel modules
+%bcond_without	smp		# don't build SMP module
+%bcond_without	userspace	# don't build userspace module
+%bcond_with	verbose		# verbose build (V=1)
 #
 Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl):	drbd jest urz±dzeniem blokowym dla klastrów o wysokiej niezawodno¶ci
@@ -105,25 +105,24 @@ sed -i -e 's#$(CONFIG_BLK_DEV_DRBD)#m#g' Makefile-2.6
 ln -sf Makefile-2.6 Makefile
 # kernel module(s)
 for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}; do
-    if [ ! -r "%{_kernelsrcdir}/config-$cfg" ]; then
-        exit 1
-    fi
-    rm -rf include
-    install -d include/{linux,config}
-    ln -sf %{_kernelsrcdir}/config-$cfg .config
-    ln -sf %{_kernelsrcdir}/include/linux/autoconf-$cfg.h include/linux/autoconf.h
-    ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch} include/asm
-    touch include/config/MARKER
-    %{__make} -C %{_kernelsrcdir} clean \
-        RCS_FIND_IGNORE="-name '*.ko' -o" \
-        M=$PWD O=$PWD \
-        %{?with_verbose:V=1}
-    %{__make} -C %{_kernelsrcdir} modules \
-        CC="%{__cc}" CPP="%{__cpp}" \
-        M=$PWD O=$PWD \
-        %{?with_verbose:V=1}
-
-    mv drbd{,-$cfg}.ko
+	if [ ! -r "%{_kernelsrcdir}/config-$cfg" ]; then
+		exit 1
+	fi
+	rm -rf include
+	install -d include/{linux,config}
+	ln -sf %{_kernelsrcdir}/config-$cfg .config
+	ln -sf %{_kernelsrcdir}/include/linux/autoconf-$cfg.h include/linux/autoconf.h
+	ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch} include/asm
+	touch include/config/MARKER
+	%{__make} -C %{_kernelsrcdir} clean \
+		RCS_FIND_IGNORE="-name '*.ko' -o" \
+		M=$PWD O=$PWD \
+		%{?with_verbose:V=1}
+	%{__make} -C %{_kernelsrcdir} modules \
+		CC="%{__cc}" CPP="%{__cpp}" \
+		M=$PWD O=$PWD \
+		%{?with_verbose:V=1}
+	mv drbd{,-$cfg}.ko
 done
 %endif
 
@@ -156,13 +155,13 @@ install documentation/*.8 $RPM_BUILD_ROOT%{_mandir}/man8
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post   -n kernel-block-drbd
+%post -n kernel-block-drbd
 %depmod %{_kernel_ver}
 
 %postun -n kernel-block-drbd
 %depmod %{_kernel_ver}
 
-%post   -n kernel-smp-block-drbd
+%post -n kernel-smp-block-drbd
 %depmod %{_kernel_ver}smp
 
 %postun -n kernel-smp-block-drbd
