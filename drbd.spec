@@ -1,9 +1,8 @@
 #
 # Conditional build:
-# _without_dist_kernel          without kernel from distribution
+%bcond_without	dist_kernel	# without kernel from distribution
 #
 %define		_kernel24	%(echo %{_kernel_ver} | grep -qv '2\.4\.' ; echo $?)
-
 Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl):	drbd jest urz±dzeniem blokowym dla klastrów o wysokiej niezawodno¶ci
 Name:		drbd
@@ -16,7 +15,7 @@ Source0:	http://www.drbd.org/uploads/media/%{name}-%{version}.tar.gz
 # Source0-md5:	3365eba9d9524da0a2c09543fbbf7f0e
 Patch0:		%{name}-kernel24.patch
 URL:		http://www.drbd.org/
-%{!?_without_dist_kernel:BuildRequires:	kernel-headers >= 2.2.20}
+%{?with_dist_kernel:BuildRequires:	kernel-headers >= 2.2.20}
 BuildRequires:	rpmbuild(macros) >= 1.118
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -56,7 +55,7 @@ Summary:	Kernel module with drbd - a block device designed to build high availib
 Summary(pl):	Modu³ j±dra do drbd - urz±dzenia blokowego dla klastrów o wysokiej niezawodno¶ci
 Release:	%{rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
-%{!?_without_dist_kernel:%requires_releq_kernel_up}
+%{?with_dist_kernel:%requires_releq_kernel_up}
 Requires(post,postun):	/sbin/depmod
 Requires:	drbdsetup
 
@@ -75,7 +74,7 @@ Summary:	SMP kernel module with drbd - a block device designed to build high ava
 Summary(pl):	Wersja SMP Modu³u j±dra do drbd - urz±dzenia blokowego dla klastrów o wysokiej niezawodno¶ci
 Release:	%{rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
-%{!?_without_dist_kernel:%requires_releq_kernel_smp}
+%{?with_dist_kernel:%requires_releq_kernel_smp}
 Requires(post,postun):	/sbin/depmod
 Requires:	drbdsetup
 
