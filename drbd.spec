@@ -30,12 +30,14 @@ przez (dedykowan±) sieæ. Mo¿e byæ widoczny jako sieciowy RAID1.
 
 %package -n drbdsetup
 Summary:	Setup tool and scripts for DRBD
+Summary(es):	Utilities to manage DRBD devices
 Summary(pl):	Narzêdzie konfiguracyjne i skrypty dla DRBD
+Summary(pt_BR):	Utilitários para gerenciar dispositivos DRBD
 Release:	%{rel}
 Group:		Applications/System
 Group(de):	Applikationen/System
 Group(pl):	Aplikacje/System
-Prereq:		chkconfig
+Prereq:		rc-scripts
 Requires:	%{name} = %{version}
 
 %description -n drbdsetup
@@ -43,6 +45,18 @@ Setup tool and init scripts for DRBD.
 
 %description -l pl -n drbdsetup
 Narzêdzie konfiguracyjne i skrypty startowe dla DRBD.
+
+%description -l pt_BR O DRBD é um dispositivo de bloco que é projetado
+para construir clusters de Alta Disponibilidade. Isto é feito
+espelhando um dispositivo de bloco inteiro via rede (dedicada ou não).
+Pode ser visto como um RAID 1 via rede. Este pacote contém utilitários
+para gerenciar dispositivos DRBD.
+
+%description -l es
+DRBD is a block device which is designed to build High Availability
+clusters. This is done by mirroring a whole block device via (maybe
+dedicated) network. You could see it as a network RAID 1. This package
+contains the utils to manage DRBD devices.
 
 %package -n kernel-block-drbd
 Summary:	kernel module with drbd - a block device designed to build high availibility clusters
@@ -168,10 +182,28 @@ rm -rf $RPM_BUILD_ROOT
 /sbin/depmod -a
 
 %post -n drbdsetup
-chkconfig --add drbd
+/sbin/chkconfig --add drbd
+if [ -f /var/lock/subsys/drbd ]; then
+	/etc/rc.d/init.d/drbd restart >&2
+else
+	echo "Run \"/etc/rc.d/init.d/drbd start\" to start drbd service." >&2
+fi
 
 %preun -n drbdsetup
-chkconfig --del drbd
+if [ "$1" = "0" ]; then
+	if [ -f /var/lock/subsys/drbd ]; then
+		/etc/rc.d/init.d/drbd stop
+	fi
+	/sbin/chkconfig --del drbd
+fi
+
+%files -n drbdsetup
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_sbindir}/drbdsetup
+%attr(755,root,root) /etc/rc.d/init.d/drbd
+%attr(755,root,root) %{_sysconfdir}/ha.d/resource.d/datadisk
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/drbd.conf
+%{_mandir}/man[58]/*
 
 %files -n kernel-block-drbd
 %defattr(644,root,root,755)
@@ -192,11 +224,3 @@ chkconfig --del drbd
 /lib/modules/%{_kernel_ver}smp/block/drbd.o
 %endif
 %endif
-
-%files -n drbdsetup
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_sbindir}/drbdsetup
-%attr(755,root,root) /etc/rc.d/init.d/drbd
-%attr(755,root,root) /etc/ha.d/resource.d/datadisk
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/drbd.conf
-%{_mandir}/man[58]/*
