@@ -10,7 +10,7 @@ Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl):	drbd jest urz±dzeniem blokowym dla klastrów o wysokiej niezawodno¶ci
 Name:		drbd
 Version:	0.5.8.1
-%define	rel	3
+%define	rel	4
 Release:	%{rel}
 License:	GPL
 Group:		Base/Kernel
@@ -59,9 +59,7 @@ Group:		Base/Kernel
 Prereq:		/sbin/depmod
 Requires:	drbdsetup
 Conflicts:	kernel-smp-block-drbd
-%{!?_without_dist_kernel:Conflicts:	kernel-smp}
-%{!?_without_dist_kernel:Conflicts:	kernel < %{_kernel_ver}}
-%{!?_without_dist_kernel:Conflicts:	kernel > %{_kernel_ver}}
+%{!?_without_dist_kernel:Requires:	kernel-up = %{_kernel_ver}}
 
 %description -n kernel-block-drbd
 drbd is a block device which is designed to build high availability
@@ -81,9 +79,7 @@ Group:		Base/Kernel
 Prereq:		/sbin/depmod
 Requires:	drbdsetup
 Conflicts:	kernel-block-drbd
-%{!?_without_dist_kernel:Conflicts:	kernel-up}
-%{!?_without_dist_kernel:Conflicts:	kernel < %{_kernel_ver}}
-%{!?_without_dist_kernel:Conflicts:	kernel > %{_kernel_ver}}
+%{!?_without_dist_kernel:Requires:	kernel-smp = %{_kernel_ver}}
 
 %description -n kernel-smp-block-drbd
 drbd is a block device which is designed to build high availability
