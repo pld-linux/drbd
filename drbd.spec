@@ -7,13 +7,13 @@
 Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl):	drbd jest urz±dzeniem blokowym dla klastrów o wysokiej niezawodno¶ci
 Name:		drbd
-Version:	0.5.8.1
-%define	rel	14
+Version:	0.6.4
+%define	rel	1
 Release:	%{rel}
 License:	GPL
 Group:		Base/Kernel
-Source0:	http://www.complang.tuwien.ac.at/reisner/drbd/download/%{name}-%{version}.tar.gz
-# Source0-md5:	b5c3e0ba931aac4577b8004166a515da
+Source0:	http://www.linbit.com/en/filemanager/download/40/%{name}-%{version}.tar.gz
+# Source0-md5:	2b65c75c4358d3d5db7e3a2134785315
 Patch0:		%{name}-kernel24.patch
 URL:		http://www.complang.tuwien.ac.at/reisner/drbd/
 %{!?_without_dist_kernel:BuildRequires:	kernel-headers >= 2.2.20}
@@ -91,7 +91,7 @@ przez (dedykowan±) sieæ. Mo¿e byæ widoczny jako sieciowy RAID1.
 %prep
 %setup -q -n %{name}
 %if %{_kernel24}
-%patch -p1
+#%patch -p1
 %endif
 
 %build
@@ -106,9 +106,10 @@ przez (dedykowan±) sieæ. Mo¿e byæ widoczny jako sieciowy RAID1.
 %endif
 %endif
 	SMPFLAG="-D__SMP__ -D__KERNEL_SMP=1" \
-	KERNVER="%{_kernel_ver}" \
+	KERNVER="%{__kernel_ver}" \
 	INCLUDE="-I%{_kernelsrcdir}/include" \
 	DEBUGFLAGS="%{rpmcflags} %{?debug:-DDBG}" \
+	LINUX="%{_kernelsrcdir}" \
 	CC="%{kgcc}"
 
 mv -f drbd/drbd.o drbd-smp.o
@@ -124,9 +125,10 @@ mv -f drbd/drbd.o drbd-smp.o
 %endif
 %endif
 	SMPFLAG="" \
-	KERNVER="%{_kernel_ver}" \
+	KERNVER="%{__kernel_ver}" \
 	INCLUDE="-I%{_kernelsrcdir}/include" \
 	DEBUGFLAGS="%{rpmcflags} %{?debug:-DDBG}" \
+	LINUX="%{_kernelsrcdir}" \
 	CC="%{kgcc}"
 # SMP end
 
@@ -180,6 +182,7 @@ fi
 
 %files -n drbdsetup
 %defattr(644,root,root,755)
+%doc documentation/{HOWTO/*.html,*.txt}
 %attr(755,root,root) %{_sbindir}/drbdsetup
 %attr(755,root,root) /etc/rc.d/init.d/drbd
 %attr(755,root,root) %{_sysconfdir}/ha.d/resource.d/datadisk
@@ -188,10 +191,10 @@ fi
 
 %files -n kernel-block-drbd
 %defattr(644,root,root,755)
-%doc ChangeLog README TODO
+%doc ChangeLog README
 /lib/modules/%{_kernel_ver}/misc/*
 
 %files -n kernel-smp-block-drbd
 %defattr(644,root,root,755)
-%doc ChangeLog README TODO
+%doc ChangeLog README
 /lib/modules/%{_kernel_ver}smp/misc/*
