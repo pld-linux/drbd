@@ -14,8 +14,18 @@ Version:	0.5.8.1
 Release:	%{rel}
 License:	GPL
 Group:		Base/Kernel
+Group(cs):	Základ/Jádro
+Group(da):	Basal/Kerne
 Group(de):	Grundsätzlich/Kern
+Group(es):	Base/Núcleo
+Group(fr):	Base/Noyau
+Group(it):	Base/Kernel
+Group(ja):	¥Ù¡¼¥¹/¥«¡¼¥Í¥ë
+Group(no):	Basis/Kjerne
 Group(pl):	Podstawowe/J±dro
+Group(pt):	Base/Núcleo
+Group(ru):	âÁÚÏ×ÙÊ ÎÁÂÏÒ/ñÄÒÏ
+Group(sv):	Bas/Kärna
 Source0:	http://www.complang.tuwien.ac.at/reisner/drbd/download/%{name}-%{version}.tar.gz
 Patch0:		%{name}-kernel24.patch
 URL:		http://www.complang.tuwien.ac.at/reisner/drbd/
@@ -44,8 +54,19 @@ Summary:	Setup tool and scripts for DRBD
 Summary(pl):	Narzêdzie konfiguracyjne i skrypty dla DRBD
 Summary(pt_BR):	Utilitários para gerenciar dispositivos DRBD
 Group:		Applications/System
+Group(cs):	Aplikace/Systém
+Group(da):	Programmer/System
 Group(de):	Applikationen/System
+Group(es):	Aplicaciones/Sistema
+Group(fr):	Applications/Système
+Group(it):	Applicazioni/Sistema
+Group(ja):	¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥·¥¹¥Æ¥à
+Group(no):	Applikasjoner/System
 Group(pl):	Aplikacje/System
+Group(pt):	Aplicações/Sistema
+Group(pt_BR):	Aplicações/Sistema
+Group(ru):	ğÒÉÌÏÖÅÎÉÑ/óÉÓÔÅÍÁ
+Group(sv):	Tillämpningar/System
 Prereq:		rc-scripts
 Prereq:		chkconfig
 
@@ -60,8 +81,18 @@ Summary:	kernel module with drbd - a block device designed to build high availib
 Summary(pl):	Modu³ kernela do drbd - urz±dzenia blokowego dla klastrów o wysokiej niezawodno¶ci
 Release:	%{rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
+Group(cs):	Základ/Jádro
+Group(da):	Basal/Kerne
 Group(de):	Grundsätzlich/Kern
+Group(es):	Base/Núcleo
+Group(fr):	Base/Noyau
+Group(it):	Base/Kernel
+Group(ja):	¥Ù¡¼¥¹/¥«¡¼¥Í¥ë
+Group(no):	Basis/Kjerne
 Group(pl):	Podstawowe/J±dro
+Group(pt):	Base/Núcleo
+Group(ru):	âÁÚÏ×ÙÊ ÎÁÂÏÒ/ñÄÒÏ
+Group(sv):	Bas/Kärna
 Prereq:		/sbin/depmod
 Requires:	drbdsetup
 Conflicts:	kernel-smp-block-drbd
@@ -84,8 +115,18 @@ Summary:	SMP kernel module with drbd - a block device designed to build high ava
 Summary(pl):	Modu³ kernela SMP do drbd - urz±dzenia blokowego dla klastrów o wysokiej niezawodno¶ci
 Release:	%{rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
+Group(cs):	Základ/Jádro
+Group(da):	Basal/Kerne
 Group(de):	Grundsätzlich/Kern
+Group(es):	Base/Núcleo
+Group(fr):	Base/Noyau
+Group(it):	Base/Kernel
+Group(ja):	¥Ù¡¼¥¹/¥«¡¼¥Í¥ë
+Group(no):	Basis/Kjerne
 Group(pl):	Podstawowe/J±dro
+Group(pt):	Base/Núcleo
+Group(ru):	âÁÚÏ×ÙÊ ÎÁÂÏÒ/ñÄÒÏ
+Group(sv):	Bas/Kärna
 Prereq:		/sbin/depmod
 Requires:	drbdsetup
 Conflicts:	kernel-block-drbd
