@@ -17,6 +17,7 @@ Source0:	http://www.linbit.com/en/filemanager/download/40/%{name}-%{version}.tar
 Patch0:		%{name}-kernel24.patch
 URL:		http://www.complang.tuwien.ac.at/reisner/drbd/
 %{!?_without_dist_kernel:BuildRequires:	kernel-headers >= 2.2.20}
+BuildRequires:	rpmbuild(macros) >= 1.118
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -153,16 +154,16 @@ install documentation/drbdsetup.8 $RPM_BUILD_ROOT%{_mandir}/man8
 rm -rf $RPM_BUILD_ROOT
 
 %post   -n kernel-block-drbd
-/sbin/depmod -a %{!?_without_dist_kernel:-F /boot/System.map-%{_kernel_ver} }%{_kernel_ver}
+%depmod %{_kernel_ver}
 
 %postun -n kernel-block-drbd
-/sbin/depmod -a %{!?_without_dist_kernel:-F /boot/System.map-%{_kernel_ver} }%{_kernel_ver}
+%depmod %{_kernel_ver}
 
 %post   -n kernel-smp-block-drbd
-/sbin/depmod -a %{!?_without_dist_kernel:-F /boot/System.map-%{_kernel_ver}smp }%{_kernel_ver}smp
+%depmod %{_kernel_ver}smp
 
 %postun -n kernel-smp-block-drbd
-/sbin/depmod -a %{!?_without_dist_kernel:-F /boot/System.map-%{_kernel_ver}smp }%{_kernel_ver}smp
+%depmod %{_kernel_ver}smp
 
 %post -n drbdsetup
 /sbin/chkconfig --add drbd
