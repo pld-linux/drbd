@@ -1,6 +1,6 @@
 
 # conditional build
-# _without_dist_kernel          without kernel form ditribution
+# _without_dist_kernel          without kernel from distribution
 
 %define		_kernel24	%(echo %{_kernel_ver} | grep -q '2\.[012]\.' ; echo $?)
 %define	rel	6
