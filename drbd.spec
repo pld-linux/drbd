@@ -7,7 +7,7 @@ Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl):	drbd jest urz±dzeniem blokowym dla klastrów o wysokiej niezawodno¶ci
 Name:		drbd
 Version:	0.5.8
-Release:	%{rel}@%{_kernel_ver}
+Release:	%{rel}
 License:	GPL
 Group:		Base/Kernel
 Group(de):	Grundsätzlich/Kern
@@ -33,7 +33,6 @@ Summary:	Setup tool and scripts for DRBD
 Summary(es):	Utilities to manage DRBD devices
 Summary(pl):	Narzêdzie konfiguracyjne i skrypty dla DRBD
 Summary(pt_BR):	Utilitários para gerenciar dispositivos DRBD
-Release:	%{rel}
 Group:		Applications/System
 Group(de):	Applikationen/System
 Group(pl):	Aplikacje/System
@@ -62,10 +61,12 @@ contains the utils to manage DRBD devices.
 %package -n kernel-block-drbd
 Summary:	kernel module with drbd - a block device designed to build high availibility clusters
 Summary(pl):	Modu³ kernela do drbd - urz±dzenia blokowego dla klastrów o wysokiej niezawodno¶ci
+Release:	%{rel}@%{_kernel_ver}
 Group:		Base/Kernel
 Group(de):	Grundsätzlich/Kern
 Group(pl):	Podstawowe/J±dro
 Prereq:		/sbin/depmod
+Requires:	drbdsetup
 Conflicts:	kernel-smp-block-drbd
 Conflicts:	kernel < %{_kernel_ver}
 Conflicts:	kernel > %{_kernel_ver}
@@ -83,10 +84,12 @@ przez (dedykowan±) sieæ. Mo¿e byæ widoczny jako sieciowy RAID1.
 %package -n kernel-smp-block-drbd
 Summary:	SMP kernel module with drbd - a block device designed to build high availibility clusters
 Summary(pl):	Modu³ kernela SMP do drbd - urz±dzenia blokowego dla klastrów o wysokiej niezawodno¶ci
+Release:	%{rel}@%{_kernel_ver}
 Group:		Base/Kernel
 Group(de):	Grundsätzlich/Kern
 Group(pl):	Podstawowe/J±dro
 Prereq:		/sbin/depmod
+Requires:	drbdsetup
 Conflicts:	kernel-block-drbd
 Conflicts:	kernel < %{_kernel_ver}
 Conflicts:	kernel > %{_kernel_ver}
