@@ -1,7 +1,7 @@
-
-# conditional build
+#
+# Conditional build:
 # _without_dist_kernel          without kernel from distribution
-
+#
 %define		_kernel24	%(echo %{_kernel_ver} | grep -q '2\.[012]\.' ; echo $?)
 
 Summary:	drbd is a block device designed to build high availibility clusters
@@ -40,8 +40,8 @@ Summary:	Setup tool and scripts for DRBD
 Summary(pl):	Narzêdzie konfiguracyjne i skrypty dla DRBD
 Summary(pt_BR):	Utilitários para gerenciar dispositivos DRBD
 Group:		Applications/System
-Prereq:		rc-scripts
-Prereq:		chkconfig
+PreReq:		rc-scripts
+Requires(post,preun):	/sbin/chkconfig
 
 %description -n drbdsetup
 Setup tool and init scripts for DRBD.
@@ -54,8 +54,8 @@ Summary:	kernel module with drbd - a block device designed to build high availib
 Summary(pl):	Modu³ kernela do drbd - urz±dzenia blokowego dla klastrów o wysokiej niezawodno¶ci
 Release:	%{rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
-Prereq:		/sbin/depmod
 %{!?_without_dist_kernel:%requires_releq_kernel_up}
+Requires(post,postun):	/sbin/depmod
 Requires:	drbdsetup
 
 %description -n kernel-block-drbd
@@ -73,8 +73,8 @@ Summary:	SMP kernel module with drbd - a block device designed to build high ava
 Summary(pl):	Modu³ kernela SMP do drbd - urz±dzenia blokowego dla klastrów o wysokiej niezawodno¶ci
 Release:	%{rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
-Prereq:		/sbin/depmod
 %{!?_without_dist_kernel:%requires_releq_kernel_smp}
+Requires(post,postun):	/sbin/depmod
 Requires:	drbdsetup
 
 %description -n kernel-smp-block-drbd
@@ -150,16 +150,16 @@ install documentation/drbdsetup.8 $RPM_BUILD_ROOT%{_mandir}/man8
 rm -rf $RPM_BUILD_ROOT
 
 %post   -n kernel-block-drbd
-/sbin/depmod -a
+/sbin/depmod -a -F /boot/System.map-%{_kernel_ver} %{_kernel_ver}
 
 %postun -n kernel-block-drbd
-/sbin/depmod -a
+/sbin/depmod -a -F /boot/System.map-%{_kernel_ver} %{_kernel_ver}
 
 %post   -n kernel-smp-block-drbd
-/sbin/depmod -a
+/sbin/depmod -a -F /boot/System.map-%{_kernel_ver}smp %{_kernel_ver}smp
 
 %postun -n kernel-smp-block-drbd
-/sbin/depmod -a
+/sbin/depmod -a -F /boot/System.map-%{_kernel_ver}smp %{_kernel_ver}smp
 
 %post -n drbdsetup
 /sbin/chkconfig --add drbd
