@@ -10,7 +10,7 @@ Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl):	drbd jest urz±dzeniem blokowym dla klastrów o wysokiej niezawodno¶ci
 Name:		drbd
 Version:	0.5.8.1
-%define	rel	4
+%define	rel	5
 Release:	%{rel}
 License:	GPL
 Group:		Base/Kernel
@@ -57,9 +57,9 @@ Summary(pl):	Modu³ kernela do drbd - urz±dzenia blokowego dla klastrów o wysokie
 Release:	%{rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 Prereq:		/sbin/depmod
+%{!?_without_dist_kernel:%requires_releq_kernel_up}
 Requires:	drbdsetup
-Conflicts:	kernel-smp-block-drbd
-%{!?_without_dist_kernel:Requires:	kernel-up = %{_kernel_ver}}
+Obsoletes:	kernel-smp-block-drbd
 
 %description -n kernel-block-drbd
 drbd is a block device which is designed to build high availability
@@ -77,9 +77,9 @@ Summary(pl):	Modu³ kernela SMP do drbd - urz±dzenia blokowego dla klastrów o wys
 Release:	%{rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 Prereq:		/sbin/depmod
+%{!?_without_dist_kernel:%requires_releq_kernel_smp}
 Requires:	drbdsetup
-Conflicts:	kernel-block-drbd
-%{!?_without_dist_kernel:Requires:	kernel-smp = %{_kernel_ver}}
+Obsoletes:	kernel-block-drbd
 
 %description -n kernel-smp-block-drbd
 drbd is a block device which is designed to build high availability
@@ -113,7 +113,7 @@ przez (dedykowan±) sieæ. Mo¿e byæ widoczny jako sieciowy RAID1.
 	INCLUDE="-I%{_kernelsrcdir}/include" \
 	DEBUGFLAGS="%{rpmcflags} %{?debug:-DDBG}"
 
-mv drbd/drbd.o drbd-smp.o
+mv -f drbd/drbd.o drbd-smp.o
 # SMP end
 
 # UP begin
@@ -204,7 +204,6 @@ fi
 /lib/modules/%{_kernel_ver}/block/drbd.o
 %endif
 
-%if 1
 %files -n kernel-smp-block-drbd
 %defattr(644,root,root,755)
 %doc *.gz
@@ -212,5 +211,4 @@ fi
 /lib/modules/%{_kernel_ver}smp/block/drbd.o
 %else
 /lib/modules/%{_kernel_ver}smp/block/drbd.o
-%endif
 %endif
