@@ -15,7 +15,6 @@ Group(pl):	Podstawowe/J±dro
 Source0:	http://www.complang.tuwien.ac.at/reisner/drbd/download/%{name}-%{version}.tar.gz
 Patch0:		%{name}-kernel24.patch
 URL:		http://www.complang.tuwien.ac.at/reisner/drbd/
-Conflicts:	kernel < %{_kernel_ver}, kernel > %{_kernel_ver}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -23,10 +22,23 @@ drbd is a block device which is designed to build high availability
 clusters. This is done by mirroring a whole block device via (a
 dedicated) network. You could see it as a network RAID1.
 
+%description -l es
+DRBD is a block device which is designed to build High Availability
+clusters. This is done by mirroring a whole block device via (maybe
+dedicated) network. You could see it as a network RAID 1. This package
+contains the utils to manage DRBD devices.
+
 %description -l pl
 drbd jest urz±dzeniem blokowym zaprojektowanym dla klastrów o wysokiej
 niezawodno¶ci. drbd dzia³a jako mirroring ca³ego urz±dzenia blokowego
 przez (dedykowan±) sieæ. Mo¿e byæ widoczny jako sieciowy RAID1.
+
+%description -l pt_BR
+O DRBD é um dispositivo de bloco que é projetado para construir
+clusters de Alta Disponibilidade. Isto é feito espelhando um
+dispositivo de bloco inteiro via rede (dedicada ou não). Pode ser
+visto como um RAID 1 via rede. Este pacote contém utilitários para
+gerenciar dispositivos DRBD.
 
 %package -n drbdsetup
 Summary:	Setup tool and scripts for DRBD
@@ -37,26 +49,13 @@ Group:		Applications/System
 Group(de):	Applikationen/System
 Group(pl):	Aplikacje/System
 Prereq:		rc-scripts
-Requires:	%{name} = %{version}
+Prereq:		chkconfig
 
 %description -n drbdsetup
 Setup tool and init scripts for DRBD.
 
 %description -l pl -n drbdsetup
 Narzêdzie konfiguracyjne i skrypty startowe dla DRBD.
-
-%description -l pt_BR
-O DRBD é um dispositivo de bloco que é projetado para construir
-clusters de Alta Disponibilidade. Isto é feito espelhando um
-dispositivo de bloco inteiro via rede (dedicada ou não). Pode ser
-visto como um RAID 1 via rede. Este pacote contém utilitários para
-gerenciar dispositivos DRBD.
-
-%description -l es
-DRBD is a block device which is designed to build High Availability
-clusters. This is done by mirroring a whole block device via (maybe
-dedicated) network. You could see it as a network RAID 1. This package
-contains the utils to manage DRBD devices.
 
 %package -n kernel-block-drbd
 Summary:	kernel module with drbd - a block device designed to build high availibility clusters
@@ -68,6 +67,7 @@ Group(pl):	Podstawowe/J±dro
 Prereq:		/sbin/depmod
 Requires:	drbdsetup
 Conflicts:	kernel-smp-block-drbd
+Conflicts:	kernel-smp
 Conflicts:	kernel < %{_kernel_ver}
 Conflicts:	kernel > %{_kernel_ver}
 
@@ -91,6 +91,7 @@ Group(pl):	Podstawowe/J±dro
 Prereq:		/sbin/depmod
 Requires:	drbdsetup
 Conflicts:	kernel-block-drbd
+Conflicts:	kernel-up
 Conflicts:	kernel < %{_kernel_ver}
 Conflicts:	kernel > %{_kernel_ver}
 
@@ -111,7 +112,7 @@ przez (dedykowan±) sieæ. Mo¿e byæ widoczny jako sieciowy RAID1.
 %endif
 
 %build
-%if 0
+%if %{_kernel24}
 %{__make} \
 %ifarch %{ix86}
 	KAF_i386="%{rpmcflags} -malign-loops=2 -malign-jumps=2 -malign-functions=2 -fomit-frame-pointer" \
@@ -120,7 +121,7 @@ przez (dedykowan±) sieæ. Mo¿e byæ widoczny jako sieciowy RAID1.
 	KAF_alpha="%{rpmcfalgs} -ffixed8 -mno-fp-regs" \
 %endif
 %endif
-	SMPFLAG="-D__SMP__" \
+	SMPFLAG="-D__SMP__ -D__KERNEL_SMP=1" \
 	KERNVER="%{_kernel_ver}" \
 	INCLUDE="-I%{_kernelsrcdir}/include" \
 	DEBUGFLAGS="%{rpmcflags} %{?debug:-DDBG}"
@@ -149,9 +150,7 @@ install -d $RPM_BUILD_ROOT{%{_sbindir},%{_mandir}/man{5,8},%{_sysconfdir}} \
 %if %{_kernel24}
 install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/misc
 install drbd/drbd.o $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc/drbd.o
-%if 0
 install drbd-smp.o $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/misc/drbd.o
-%endif
 %else
 install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/block
 install drbd/drbd.o $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/block
@@ -218,7 +217,7 @@ fi
 /lib/modules/%{_kernel_ver}/block/drbd.o
 %endif
 
-%if 0
+%if %{_kernel24}
 %files -n kernel-smp-block-drbd
 %defattr(644,root,root,755)
 %doc *.gz
