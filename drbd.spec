@@ -22,12 +22,6 @@ drbd is a block device which is designed to build high availability
 clusters. This is done by mirroring a whole block device via (a
 dedicated) network. You could see it as a network RAID1.
 
-%description -l es
-DRBD is a block device which is designed to build High Availability
-clusters. This is done by mirroring a whole block device via (maybe
-dedicated) network. You could see it as a network RAID 1. This package
-contains the utils to manage DRBD devices.
-
 %description -l pl
 drbd jest urz±dzeniem blokowym zaprojektowanym dla klastrów o wysokiej
 niezawodno¶ci. drbd dzia³a jako mirroring ca³ego urz±dzenia blokowego
@@ -42,7 +36,6 @@ gerenciar dispositivos DRBD.
 
 %package -n drbdsetup
 Summary:	Setup tool and scripts for DRBD
-Summary(es):	Utilities to manage DRBD devices
 Summary(pl):	Narzêdzie konfiguracyjne i skrypty dla DRBD
 Summary(pt_BR):	Utilitários para gerenciar dispositivos DRBD
 Group:		Applications/System
