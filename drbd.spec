@@ -2,15 +2,13 @@
 # conditional build
 # _without_dist_kernel          without kernel form ditribution
 
-%define		_kernel_ver	%(grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | cut -d'"' -f2)
-%define		_kernel_ver_str %(echo %{_kernel_ver} | sed s/-/_/g)
 %define		_kernel24	%(echo %{_kernel_ver} | grep -q '2\.[012]\.' ; echo $?)
+%define	rel	6
 
 Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl):	drbd jest urz±dzeniem blokowym dla klastrów o wysokiej niezawodno¶ci
 Name:		drbd
 Version:	0.5.8.1
-%define	rel	5
 Release:	%{rel}
 License:	GPL
 Group:		Base/Kernel
@@ -59,7 +57,6 @@ Group:		Base/Kernel
 Prereq:		/sbin/depmod
 %{!?_without_dist_kernel:%requires_releq_kernel_up}
 Requires:	drbdsetup
-Obsoletes:	kernel-smp-block-drbd
 
 %description -n kernel-block-drbd
 drbd is a block device which is designed to build high availability
@@ -79,7 +76,6 @@ Group:		Base/Kernel
 Prereq:		/sbin/depmod
 %{!?_without_dist_kernel:%requires_releq_kernel_smp}
 Requires:	drbdsetup
-Obsoletes:	kernel-block-drbd
 
 %description -n kernel-smp-block-drbd
 drbd is a block device which is designed to build high availability
@@ -136,15 +132,9 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sbindir},%{_mandir}/man{5,8},%{_sysconfdir}} \
 	$RPM_BUILD_ROOT{/etc/rc.d/init.d,/etc/ha.d/resource.d}
 
-%if 0
 install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/misc
 install drbd/drbd.o $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc/drbd.o
 install drbd-smp.o $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/misc/drbd.o
-%else
-install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/block
-install drbd/drbd.o $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/block
-install drbd-smp.o $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/block/drbd.o
-%endif
 
 install user/drbdsetup $RPM_BUILD_ROOT%{_sbindir}
 install scripts/drbd.conf $RPM_BUILD_ROOT%{_sysconfdir}
@@ -198,17 +188,9 @@ fi
 %files -n kernel-block-drbd
 %defattr(644,root,root,755)
 %doc *.gz
-%if %{_kernel24}
-/lib/modules/%{_kernel_ver}/block/drbd.o
-%else
-/lib/modules/%{_kernel_ver}/block/drbd.o
-%endif
+/lib/modules/%{_kernel_ver}/misc/drbd.o
 
 %files -n kernel-smp-block-drbd
 %defattr(644,root,root,755)
 %doc *.gz
-%if %{_kernel24}
-/lib/modules/%{_kernel_ver}smp/block/drbd.o
-%else
-/lib/modules/%{_kernel_ver}smp/block/drbd.o
-%endif
+/lib/modules/%{_kernel_ver}smp/misc/drbd.o
