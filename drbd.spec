@@ -46,11 +46,12 @@ Setup tool and init scripts for DRBD.
 %description -l pl -n drbdsetup
 Narzêdzie konfiguracyjne i skrypty startowe dla DRBD.
 
-%description -l pt_BR O DRBD é um dispositivo de bloco que é projetado
-para construir clusters de Alta Disponibilidade. Isto é feito
-espelhando um dispositivo de bloco inteiro via rede (dedicada ou não).
-Pode ser visto como um RAID 1 via rede. Este pacote contém utilitários
-para gerenciar dispositivos DRBD.
+%description -l pt_BR
+O DRBD é um dispositivo de bloco que é projetado para construir
+clusters de Alta Disponibilidade. Isto é feito espelhando um
+dispositivo de bloco inteiro via rede (dedicada ou não). Pode ser
+visto como um RAID 1 via rede. Este pacote contém utilitários para
+gerenciar dispositivos DRBD.
 
 %description -l es
 DRBD is a block device which is designed to build High Availability
