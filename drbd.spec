@@ -48,7 +48,7 @@ Prereq:		chkconfig
 %description -n drbdsetup
 Setup tool and init scripts for DRBD.
 
-%description -l pl -n drbdsetup
+%description -n drbdsetup -l pl
 Narzêdzie konfiguracyjne i skrypty startowe dla DRBD.
 
 %package -n kernel-block-drbd
@@ -68,7 +68,7 @@ drbd is a block device which is designed to build high availability
 clusters. This is done by mirroring a whole block device via (a
 dedicated) network. You could see it as a network RAID1.
 
-%description -l pl -n kernel-block-drbd
+%description -n kernel-block-drbd -l pl
 drbd jest urz±dzeniem blokowym zaprojektowanym dla klastrów o wysokiej
 niezawodno¶ci. drbd dzia³a jako mirroring ca³ego urz±dzenia blokowego
 przez (dedykowan±) sieæ. Mo¿e byæ widoczny jako sieciowy RAID1.
@@ -90,7 +90,7 @@ drbd is a block device which is designed to build high availability
 clusters. This is done by mirroring a whole block device via (a
 dedicated) network. You could see it as a network RAID1.
 
-%description -l pl -n kernel-smp-block-drbd
+%description -n kernel-smp-block-drbd -l pl
 drbd jest urz±dzeniem blokowym zaprojektowanym dla klastrów o wysokiej
 niezawodno¶ci. drbd dzia³a jako mirroring ca³ego urz±dzenia blokowego
 przez (dedykowan±) sieæ. Mo¿e byæ widoczny jako sieciowy RAID1.
