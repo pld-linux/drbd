@@ -3,14 +3,14 @@
 # _without_dist_kernel          without kernel form ditribution
 
 %define		_kernel_ver	%(grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | cut -d'"' -f2)
-%define     _kernel_ver_str %(echo %{_kernel_ver} | sed s/-/_/g)
+%define		_kernel_ver_str %(echo %{_kernel_ver} | sed s/-/_/g)
 %define		_kernel24	%(echo %{_kernel_ver} | grep -q '2\.[012]\.' ; echo $?)
 
 Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl):	drbd jest urz±dzeniem blokowym dla klastrów o wysokiej niezawodno¶ci
 Name:		drbd
 Version:	0.5.8.1
-%define	rel	2
+%define	rel	3
 Release:	%{rel}
 License:	GPL
 Group:		Base/Kernel
