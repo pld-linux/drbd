@@ -1,0 +1,80 @@
+--- drbd.orig/drbd/drbd.c	Fri May 25 13:13:22 2001
++++ drbd/drbd/drbd.c	Sat Sep  8 10:04:56 2001
+@@ -404,7 +404,7 @@
+ 
+ 		rlen = rlen + sprintf(buf + rlen, "\n");
+ 
+-		for (i = 0; i < NR_REQUEST; i++) {
++		for (i = 0; i < QUEUE_NR_REQUESTS; i++) {
+ 			if (my_all_requests[i].rq_status == RQ_INACTIVE) {
+ 				l = 'E';
+ 			} else {
+@@ -1079,8 +1079,8 @@
+ 		unsigned long flags;
+ 		del_timer(&mdev->s_timeout);
+ 		spin_lock_irqsave(&current->sigmask_lock,flags);
+-		if (sigismember(&current->signal, DRBD_SIG)) {
+-			sigdelset(&current->signal, DRBD_SIG);
++		if (sigismember(&current->pending.signal, DRBD_SIG)) {
++			sigdelset(&current->pending.signal, DRBD_SIG);
+ 			recalc_sigpending(current);
+ 			spin_unlock_irqrestore(&current->sigmask_lock,flags);
+ 
+@@ -1237,7 +1237,7 @@
+ 
+ void drbd_dio_end(struct buffer_head *bh, int uptodate)
+ {
+-	struct request *req = bh->b_dev_id;
++	struct request *req = bh->b_private;
+ 
+ 	// READs are sorted out in drbd_end_req().
+ 	drbd_end_req(req, RQ_DRBD_WRITTEN, uptodate);
+@@ -1356,7 +1356,7 @@
+ #endif			
+ 
+ 			bh->b_list = BUF_LOCKED;
+-			bh->b_dev_id = req;
++			bh->b_private = req;
+ 			bh->b_end_io = drbd_dio_end;
+ 			
+ 			if(req->cmd == WRITE) 
+@@ -2222,8 +2222,8 @@
+ 			unsigned long flags;
+ 			del_timer(&accept_timeout);
+ 			spin_lock_irqsave(&current->sigmask_lock,flags);
+-			if (sigismember(&current->signal, DRBD_SIG)) {
+-				sigdelset(&current->signal, DRBD_SIG);
++			if (sigismember(&current->pending.signal, DRBD_SIG)) {
++				sigdelset(&current->pending.signal, DRBD_SIG);
+ 				recalc_sigpending(current);
+ 				spin_unlock_irqrestore(&current->sigmask_lock,
+ 						       flags);
+@@ -2453,7 +2453,7 @@
+ 	        return FALSE;
+ 
+ 	mark_buffer_uptodate(bh, 0);
+-	mark_buffer_dirty(bh, 1);
++	mark_buffer_dirty(bh);
+ 
+ 	if (drbd_conf[minor].conf.wire_protocol == DRBD_PROT_B
+ 	    && header.block_id != ID_SYNCER) {
+@@ -2480,7 +2480,7 @@
+ 	 */
+ 
+ 	if (drbd_conf[minor].conf.wire_protocol == DRBD_PROT_C) {
+-		if (drbd_conf[minor].unacked_cnt >= (NR_REQUEST / 4)) {
++		if (drbd_conf[minor].unacked_cnt >= (QUEUE_NR_REQUESTS / 4)) {
+ 			run_task_queue(&tq_disk);
+ 		}
+ 	}
+@@ -2869,8 +2869,8 @@
+ 			thi->t_state = Running;
+ 			wake_up(&thi->wait);
+ 			spin_lock_irqsave(&current->sigmask_lock,flags);
+-			if (sigismember(&current->signal, SIGTERM)) {
+-				sigdelset(&current->signal, SIGTERM);
++			if (sigismember(&current->pending.signal, SIGTERM)) {
++				sigdelset(&current->pending.signal, SIGTERM);
+ 				recalc_sigpending(current);
+ 			}
+ 			spin_unlock_irqrestore(&current->sigmask_lock,flags);
