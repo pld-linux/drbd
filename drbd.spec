@@ -1,4 +1,9 @@
+
+# conditional build
+# _without_dist_kernel          without kernel form ditribution
+
 %define		_kernel_ver	%(grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | cut -d'"' -f2)
+%define         _kernel_ver_str %(echo %{_kernel_ver} | sed s/-/_/g)
 %define		_kernel24	%(echo %{_kernel_ver} | grep -q '2\.[012]\.' ; echo $?)
 
 %define		rel		1
@@ -53,16 +58,16 @@ Narzêdzie konfiguracyjne i skrypty startowe dla DRBD.
 %package -n kernel-block-drbd
 Summary:	kernel module with drbd - a block device designed to build high availibility clusters
 Summary(pl):	Modu³ kernela do drbd - urz±dzenia blokowego dla klastrów o wysokiej niezawodno¶ci
-Release:	%{rel}@%{_kernel_ver}
+Release:	%{rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 Group(de):	Grundsätzlich/Kern
 Group(pl):	Podstawowe/J±dro
 Prereq:		/sbin/depmod
 Requires:	drbdsetup
 Conflicts:	kernel-smp-block-drbd
-Conflicts:	kernel-smp
-Conflicts:	kernel < %{_kernel_ver}
-Conflicts:	kernel > %{_kernel_ver}
+%{!?_without_dist_kernel:Conflicts:	kernel-smp}
+%{!?_without_dist_kernel:Conflicts:	kernel < %{_kernel_ver}}
+%{!?_without_dist_kernel:Conflicts:	kernel > %{_kernel_ver}}
 
 %description -n kernel-block-drbd
 drbd is a block device which is designed to build high availability
@@ -77,16 +82,16 @@ przez (dedykowan±) sieæ. Mo¿e byæ widoczny jako sieciowy RAID1.
 %package -n kernel-smp-block-drbd
 Summary:	SMP kernel module with drbd - a block device designed to build high availibility clusters
 Summary(pl):	Modu³ kernela SMP do drbd - urz±dzenia blokowego dla klastrów o wysokiej niezawodno¶ci
-Release:	%{rel}@%{_kernel_ver}
+Release:	%{rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 Group(de):	Grundsätzlich/Kern
 Group(pl):	Podstawowe/J±dro
 Prereq:		/sbin/depmod
 Requires:	drbdsetup
 Conflicts:	kernel-block-drbd
-Conflicts:	kernel-up
-Conflicts:	kernel < %{_kernel_ver}
-Conflicts:	kernel > %{_kernel_ver}
+%{!?_without_dist_kernel:Conflicts:	kernel-up}
+%{!?_without_dist_kernel:Conflicts:	kernel < %{_kernel_ver}}
+%{!?_without_dist_kernel:Conflicts:	kernel > %{_kernel_ver}}
 
 %description -n kernel-smp-block-drbd
 drbd is a block device which is designed to build high availability
