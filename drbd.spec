@@ -3,7 +3,7 @@
 # _without_dist_kernel          without kernel form ditribution
 
 %define		_kernel_ver	%(grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | cut -d'"' -f2)
-%define         _kernel_ver_str %(echo %{_kernel_ver} | sed s/-/_/g)
+%define     _kernel_ver_str %(echo %{_kernel_ver} | sed s/-/_/g)
 %define		_kernel24	%(echo %{_kernel_ver} | grep -q '2\.[012]\.' ; echo $?)
 
 %define		rel		1
@@ -212,7 +212,7 @@ fi
 %defattr(644,root,root,755)
 %doc *.gz
 %if %{_kernel24}
-/lib/modules/%{_kernel_ver}/misc/drbd.o
+/lib/modules/%{_kernel_ver}/block/drbd.o
 %else
 /lib/modules/%{_kernel_ver}/block/drbd.o
 %endif
@@ -222,7 +222,7 @@ fi
 %defattr(644,root,root,755)
 %doc *.gz
 %if %{_kernel24}
-/lib/modules/%{_kernel_ver}smp/misc/drbd.o
+/lib/modules/%{_kernel_ver}smp/block/drbd.o
 %else
 /lib/modules/%{_kernel_ver}smp/block/drbd.o
 %endif
