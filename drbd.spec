@@ -107,7 +107,8 @@ przez (dedykowan±) sieæ. Mo¿e byæ widoczny jako sieciowy RAID1.
 	SMPFLAG="-D__SMP__ -D__KERNEL_SMP=1" \
 	KERNVER="%{_kernel_ver}" \
 	INCLUDE="-I%{_kernelsrcdir}/include" \
-	DEBUGFLAGS="%{rpmcflags} %{?debug:-DDBG}"
+	DEBUGFLAGS="%{rpmcflags} %{?debug:-DDBG}" \
+	CC="%{kgcc}"
 
 mv -f drbd/drbd.o drbd-smp.o
 # SMP end
@@ -124,7 +125,8 @@ mv -f drbd/drbd.o drbd-smp.o
 	SMPFLAG="" \
 	KERNVER="%{_kernel_ver}" \
 	INCLUDE="-I%{_kernelsrcdir}/include" \
-	DEBUGFLAGS="%{rpmcflags} %{?debug:-DDBG}"
+	DEBUGFLAGS="%{rpmcflags} %{?debug:-DDBG}" \
+	CC="%{kgcc}"
 # SMP end
 
 %install
