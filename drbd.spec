@@ -52,8 +52,8 @@ Setup tool and init scripts for DRBD.
 Narzêdzie konfiguracyjne i skrypty startowe dla DRBD.
 
 %package -n kernel-block-drbd
-Summary:	kernel module with drbd - a block device designed to build high availibility clusters
-Summary(pl):	Modu³ kernela do drbd - urz±dzenia blokowego dla klastrów o wysokiej niezawodno¶ci
+Summary:	Kernel module with drbd - a block device designed to build high availibility clusters
+Summary(pl):	Modu³ j±dra do drbd - urz±dzenia blokowego dla klastrów o wysokiej niezawodno¶ci
 Release:	%{rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 %{!?_without_dist_kernel:%requires_releq_kernel_up}
@@ -72,7 +72,7 @@ przez (dedykowan±) sieæ. Mo¿e byæ widoczny jako sieciowy RAID1.
 
 %package -n kernel-smp-block-drbd
 Summary:	SMP kernel module with drbd - a block device designed to build high availibility clusters
-Summary(pl):	Modu³ kernela SMP do drbd - urz±dzenia blokowego dla klastrów o wysokiej niezawodno¶ci
+Summary(pl):	Wersja SMP Modu³u j±dra do drbd - urz±dzenia blokowego dla klastrów o wysokiej niezawodno¶ci
 Release:	%{rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 %{!?_without_dist_kernel:%requires_releq_kernel_smp}
