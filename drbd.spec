@@ -20,6 +20,7 @@ Group(pl):	Podstawowe/J±dro
 Source0:	http://www.complang.tuwien.ac.at/reisner/drbd/download/%{name}-%{version}.tar.gz
 Patch0:		%{name}-kernel24.patch
 URL:		http://www.complang.tuwien.ac.at/reisner/drbd/
+%{!?_without_dist_kernel:BuildRequires:	kernel-headers >= 2.2.20}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
