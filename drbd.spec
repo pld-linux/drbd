@@ -11,7 +11,7 @@
 Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl):	drbd jest urz±dzeniem blokowym dla klastrów o wysokiej niezawodno¶ci
 Name:		drbd
-Version:	0.5.8
+Version:	0.5.8.1
 Release:	%{rel}
 License:	GPL
 Group:		Base/Kernel
@@ -110,7 +110,8 @@ przez (dedykowan±) sieæ. Mo¿e byæ widoczny jako sieciowy RAID1.
 %endif
 
 %build
-%if %{_kernel24}
+
+# SMP begin
 %{__make} \
 %ifarch %{ix86}
 	KAF_i386="%{rpmcflags} -malign-loops=2 -malign-jumps=2 -malign-functions=2 -fomit-frame-pointer" \
@@ -125,8 +126,9 @@ przez (dedykowan±) sieæ. Mo¿e byæ widoczny jako sieciowy RAID1.
 	DEBUGFLAGS="%{rpmcflags} %{?debug:-DDBG}"
 
 mv drbd/drbd.o drbd-smp.o
-%endif
+# SMP end
 
+# UP begin
 %{__make} \
 %ifarch %{ix86}
 	KAF_i386="%{rpmcflags} -malign-loops=2 -malign-jumps=2 -malign-functions=2 -fomit-frame-pointer" \
@@ -139,22 +141,21 @@ mv drbd/drbd.o drbd-smp.o
 	KERNVER="%{_kernel_ver}" \
 	INCLUDE="-I%{_kernelsrcdir}/include" \
 	DEBUGFLAGS="%{rpmcflags} %{?debug:-DDBG}"
+# SMP end
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sbindir},%{_mandir}/man{5,8},%{_sysconfdir}} \
 	$RPM_BUILD_ROOT{/etc/rc.d/init.d,/etc/ha.d/resource.d}
 
-%if %{_kernel24}
+%if 0
 install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/misc
 install drbd/drbd.o $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc/drbd.o
 install drbd-smp.o $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/misc/drbd.o
 %else
 install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/block
 install drbd/drbd.o $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/block
-%if 0
-install drbd-smp.o $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/block/drbd.o
-%endif
+install drbd-smp.o $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/block/drbd.o
 %endif
 
 install user/drbdsetup $RPM_BUILD_ROOT%{_sbindir}
@@ -215,7 +216,7 @@ fi
 /lib/modules/%{_kernel_ver}/block/drbd.o
 %endif
 
-%if %{_kernel24}
+%if 1
 %files -n kernel-smp-block-drbd
 %defattr(644,root,root,755)
 %doc *.gz
