@@ -19,7 +19,7 @@ Source0:	http://oss.linbit.com/drbd/0.7/%{name}-%{version}.tar.gz
 URL:		http://www.drbd.org/
 BuildRequires:	bison
 BuildRequires:	flex
-%{?with_dist_kernel:BuildRequires:	kernel-source >= 2.6.0}
+%{?with_dist_kernel:BuildRequires:	kernel-module-build}
 BuildRequires:	rpmbuild(macros) >= 1.118
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -130,7 +130,7 @@ done
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sbindir},%{_mandir}/man{5,8},%{_sysconfdir}} \
+install -d $RPM_BUILD_ROOT{/sbin,%{_mandir}/man{5,8},%{_sysconfdir}} \
 	$RPM_BUILD_ROOT{/etc/rc.d/init.d,/etc/ha.d/resource.d}
 
 %if %{with kernel}
@@ -144,7 +144,7 @@ install drbd/drbd-smp.ko \
 %endif
 
 %if %{with userspace}
-install user/{drbdadm,drbdsetup} $RPM_BUILD_ROOT%{_sbindir}
+install user/{drbdadm,drbdsetup} $RPM_BUILD_ROOT/sbin
 install scripts/drbd.conf $RPM_BUILD_ROOT%{_sysconfdir}
 install scripts/drbd $RPM_BUILD_ROOT/etc/rc.d/init.d
 
@@ -189,10 +189,10 @@ fi
 %files -n drbdsetup
 %defattr(644,root,root,755)
 %doc documentation/*.txt
-%attr(755,root,root) %{_sbindir}/*
+%attr(755,root,root) /sbin/*
 %attr(754,root,root) /etc/rc.d/init.d/drbd
 %attr(755,root,root) %{_sysconfdir}/ha.d/resource.d/datadisk
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/drbd.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/drbd.conf
 %{_mandir}/man[58]/*
 %endif
 
