@@ -47,6 +47,7 @@ Summary(pt_BR):	Utilitários para gerenciar dispositivos DRBD
 Group:		Applications/System
 PreReq:		rc-scripts
 Requires(post,preun):	/sbin/chkconfig
+Conflicts:	drbdsetup24
 
 %description -n drbdsetup
 Setup tool and init scripts for DRBD.
