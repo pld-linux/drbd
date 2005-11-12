@@ -131,6 +131,10 @@ for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}
 		M=$PWD O=$PWD \
 		%{?with_verbose:V=1}
 	%{__make} -C %{_kernelsrcdir} modules \
+%if "%{_target_base_arch}" != "%{_arch}"
+		ARCH=%{_target_base_arch} \
+		CROSS_COMPILE=%{_target_cpu}-pld-linux- \
+%endif
 		HOSTCC="%{__cc}" \
 		CPP="%{__cpp}" \
 		M=$PWD O=$PWD \
