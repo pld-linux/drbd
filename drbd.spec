@@ -10,7 +10,7 @@ Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl):	drbd jest urz±dzeniem blokowym dla klastrów o wysokiej niezawodno¶ci
 Name:		drbd
 Version:	0.7.14
-%define	rel	3
+%define	rel	4
 Release:	%{rel}
 License:	GPL
 Group:		Base/Kernel
@@ -28,7 +28,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %ifarch sparc
 %define         _target_base_arch       sparc64
-%define         _target_cpu             sparc64
+%define         _target_base_cpu             sparc64
 %endif
 
 %description
@@ -143,7 +143,7 @@ for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}
 	%{__make} -C %{_kernelsrcdir} modules \
 %if "%{_target_base_arch}" != "%{_arch}"
 		ARCH=%{_target_base_arch} \
-		CROSS_COMPILE=%{_target_cpu}-pld-linux- \
+		CROSS_COMPILE=%{_target_base_cpu}-pld-linux- \
 %endif
 		HOSTCC="%{__cc}" \
 		CPP="%{__cpp}" \
