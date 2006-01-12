@@ -6,11 +6,15 @@
 %bcond_without	userspace	# don't build userspace module
 %bcond_with	verbose		# verbose build (V=1)
 #
+%ifarch sparc
+%undefine	with_smp
+%endif
+
 Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl):	drbd jest urz±dzeniem blokowym dla klastrów o wysokiej niezawodno¶ci
 Name:		drbd
 Version:	0.7.15
-%define	rel	1
+%define	rel	2
 Release:	%{rel}
 License:	GPL
 Group:		Base/Kernel
