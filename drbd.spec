@@ -10,11 +10,11 @@
 %undefine	with_smp
 %endif
 
+%define	rel	4
 Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl):	drbd jest urz±dzeniem blokowym dla klastrów o wysokiej niezawodno¶ci
 Name:		drbd
 Version:	0.7.15
-%define	rel	3
 Release:	%{rel}
 License:	GPL
 Group:		Base/Kernel
@@ -49,8 +49,8 @@ Summary:	Setup tool and scripts for DRBD
 Summary(pl):	Narzêdzie konfiguracyjne i skrypty dla DRBD
 Summary(pt_BR):	Utilitários para gerenciar dispositivos DRBD
 Group:		Applications/System
-PreReq:		rc-scripts
 Requires(post,preun):	/sbin/chkconfig
+Requires:	rc-scripts
 Conflicts:	drbdsetup24
 
 %description -n drbdsetup
@@ -115,26 +115,14 @@ for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}
 	if [ ! -r "%{_kernelsrcdir}/config-$cfg" ]; then
 		exit 1
 	fi
-	rm -rf include
-	install -d include/{linux,config}
-	ln -sf %{_kernelsrcdir}/config-$cfg .config
-	ln -sf %{_kernelsrcdir}/include/linux/autoconf-$cfg.h include/linux/autoconf.h
-%ifarch ppc
-	if [ -d "%{_kernelsrcdir}/include/asm-powerpc" ]; then
-		install -d include/asm
-		cp -a %{_kernelsrcdir}/include/asm-%{_target_base_arch}/* include/asm
-		cp -a %{_kernelsrcdir}/include/asm-powerpc/* include/asm
-	else
-		ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch} include/asm
-	fi
-%else
-	ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch} include/asm
-%endif
-	ln -sf %{_kernelsrcdir}/Module.symvers-$cfg Module.symvers
-	touch include/config/MARKER
+        install -d o/include/linux
+        ln -sf %{_kernelsrcdir}/config-$cfg o/.config
+        ln -sf %{_kernelsrcdir}/Module.symvers-$cfg o/Module.symvers
+        ln -sf %{_kernelsrcdir}/include/linux/autoconf-$cfg.h o/include/linux/autoconf.h
+        %{__make} -C %{_kernelsrcdir} O=$PWD/o prepare scripts
 	%{__make} -C %{_kernelsrcdir} clean \
 		RCS_FIND_IGNORE="-name '*.ko' -o" \
-		M=$PWD O=$PWD \
+		M=$PWD O=$PWD/o \
 		%{?with_verbose:V=1}
 	%{__make} -C %{_kernelsrcdir} modules \
 %if "%{_target_base_arch}" != "%{_arch}"
@@ -143,7 +131,7 @@ for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}
 %endif
 		HOSTCC="%{__cc}" \
 		CPP="%{__cpp}" \
-		M=$PWD O=$PWD \
+		M=$PWD O=$PWD/o \
 		%{?with_verbose:V=1}
 	mv drbd{,-$cfg}.ko
 done
@@ -169,7 +157,7 @@ install user/{drbdadm,drbdsetup} $RPM_BUILD_ROOT/sbin
 install scripts/drbd.conf $RPM_BUILD_ROOT%{_sysconfdir}
 install scripts/drbd $RPM_BUILD_ROOT/etc/rc.d/init.d
 
-ln -sf /etc/rc.d/init.d/drbd $RPM_BUILD_ROOT/etc/ha.d/resource.d/datadisk
+ln -sf /etc/rc.d/init.d/drbd $RPM_BUILD_ROOT%{_sysconfdir}/ha.d/resource.d/datadisk
 
 install documentation/*.5 $RPM_BUILD_ROOT%{_mandir}/man5
 install documentation/*.8 $RPM_BUILD_ROOT%{_mandir}/man8
