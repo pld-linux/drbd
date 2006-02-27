@@ -1,0 +1,2 @@
+- use %{_kernel_ver} only in Release field in with kernel modules packages,
+- added "Requires: drbdsetup" for kernel modules packages.
