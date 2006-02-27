@@ -24,7 +24,7 @@ URL:		http://www.drbd.org/
 BuildRequires:	bison
 BuildRequires:	flex
 %{?with_dist_kernel:BuildRequires:	kernel-module-build}
-BuildRequires:	rpmbuild(macros) >= 1.118
+BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -180,17 +180,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %post -n drbdsetup
 /sbin/chkconfig --add drbd
-if [ -f /var/lock/subsys/drbd ]; then
-	/etc/rc.d/init.d/drbd restart >&2
-else
-	echo "Run \"/etc/rc.d/init.d/drbd start\" to start drbd service." >&2
-fi
+%service drbd restart
 
 %preun -n drbdsetup
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/drbd ]; then
-		/etc/rc.d/init.d/drbd stop
-	fi
+	%service drbd stop
 	/sbin/chkconfig --del drbd
 fi
 
