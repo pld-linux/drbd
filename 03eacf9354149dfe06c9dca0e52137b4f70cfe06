@@ -1,0 +1,7 @@
+- removed Conflicts: kernel != kernel_ver from main package (unneeded)
+- reordered the descriptions
+- drbdsetup doesn't require drbd (unavailable)
+- drbdsetup prereq: chkconfig (should it prereq rc-scripts?)
+- the modules conflict kernel-{smp,up}
+- %if 0 changed to %if %{_kernel24} (SMP builds under 2.4)
+- -D__KERNEL_SMP=1 to SMP build options
