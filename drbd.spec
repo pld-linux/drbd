@@ -193,7 +193,7 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) /sbin/*
 %attr(754,root,root) /etc/rc.d/init.d/drbd
-%attr(755,root,root) %{_sysconfdir}/ha.d/resource.d/datadisk
+%attr(755,root,root) %{_sysconfdir}/ha.d/resource.d/drbddisk
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/drbd.conf
 %{_mandir}/man[58]/*
 %endif
