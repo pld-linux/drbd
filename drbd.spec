@@ -10,7 +10,7 @@
 %undefine	with_smp
 %endif
 
-%define	_rel	1
+%define	_rel	1.1
 Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl):	drbd jest urz±dzeniem blokowym dla klastrów o wysokiej niezawodno¶ci
 Name:		drbd
@@ -157,7 +157,7 @@ install user/{drbdadm,drbdsetup} $RPM_BUILD_ROOT/sbin
 install scripts/drbd.conf $RPM_BUILD_ROOT%{_sysconfdir}
 install scripts/drbd $RPM_BUILD_ROOT/etc/rc.d/init.d
 
-ln -sf /etc/rc.d/init.d/drbd $RPM_BUILD_ROOT%{_sysconfdir}/ha.d/resource.d/datadisk
+install scripts/drbddisk $RPM_BUILD_ROOT%{_sysconfdir}/ha.d/resource.d
 
 install documentation/*.5 $RPM_BUILD_ROOT%{_mandir}/man5
 install documentation/*.8 $RPM_BUILD_ROOT%{_mandir}/man8
