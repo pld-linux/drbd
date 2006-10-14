@@ -20,6 +20,7 @@ License:	GPL
 Group:		Base/Kernel
 Source0:	http://oss.linbit.com/drbd/0.7/%{name}-%{version}.tar.gz
 # Source0-md5:	17bfc263852db38fa9e51e02eb264e43
+Patch0:		%{name}-nodevfs.patch
 URL:		http://www.drbd.org/
 BuildRequires:	bison
 BuildRequires:	flex
@@ -99,6 +100,7 @@ przez (dedykowan±) sieæ. Mo¿e byæ widoczny jako sieciowy RAID1.
 
 %prep
 %setup -q
+%patch -p0
 
 %build
 %if %{with userspace}
