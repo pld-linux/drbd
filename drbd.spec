@@ -10,7 +10,7 @@
 %undefine	with_smp
 %endif
 
-%define	_rel	1
+%define	_rel	2
 Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl):	drbd jest urz±dzeniem blokowym dla klastrów o wysokiej niezawodno¶ci
 Name:		drbd
