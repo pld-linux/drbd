@@ -1,0 +1,2 @@
+- rel 3; should build fine even of ppc (seems that 2.4.14 contains parts of
+  ppc32+ppc64 merge -> asm dir is splitted on ppc)
