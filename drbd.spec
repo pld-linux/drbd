@@ -20,11 +20,12 @@ License:	GPL
 Group:		Base/Kernel
 Source0:	http://oss.linbit.com/drbd/0.7/%{name}-%{version}.tar.gz
 # Source0-md5:	589626e0c62d314d3bbe78275b9e7d2d
+Patch0:		%{name}-Makefile.patch
 URL:		http://www.drbd.org/
 BuildRequires:	bison
 BuildRequires:	flex
 %{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build}
-BuildRequires:	rpmbuild(macros) >= 1.308
+BuildRequires:	rpmbuild(macros) >= 1.330
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -99,12 +100,15 @@ przez (dedykowan±) sieæ. Mo¿e byæ widoczny jako sieciowy RAID1.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 %if %{with userspace}
 %{__make} tools \
+	KVER=dummy \
 	CC="%{__cc}" \
-	KDIR="%{_kernelsrcdir}"
+	OPTCFLAGS="%{rpmcflags}" \
+	LDFLAGS="%{rpmldflags}"
 %endif
 
 %if %{with kernel}
@@ -112,31 +116,7 @@ cd drbd
 sed -i -e 's#$(CONFIG_BLK_DEV_DRBD)#m#g' Makefile-2.6
 ln -sf Makefile-2.6 Makefile
 # kernel module(s)
-for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}; do
-	if [ ! -r "%{_kernelsrcdir}/config-$cfg" ]; then
-		exit 1
-	fi
-	install -d o/include/linux
-	ln -sf %{_kernelsrcdir}/config-$cfg o/.config
-	ln -sf %{_kernelsrcdir}/Module.symvers-$cfg o/Module.symvers
-	ln -sf %{_kernelsrcdir}/include/linux/autoconf-$cfg.h o/include/linux/autoconf.h
-	%{__make} -j1 -C %{_kernelsrcdir} O=$PWD/o prepare scripts
-	%{__make} -C %{_kernelsrcdir} clean \
-		RCS_FIND_IGNORE="-name '*.ko' -o" \
-		M=$PWD O=$PWD/o \
-		%{?with_verbose:V=1}
-	%{__make} -C %{_kernelsrcdir} modules \
-%if "%{_target_base_arch}" != "%{_arch}"
-		ARCH=%{_target_base_arch} \
-		CROSS_COMPILE=%{_target_base_cpu}-pld-linux- \
-%endif
-		EXTRA_CFLAGS="-DNO_MORE_DEV_FS" \
-		HOSTCC="%{__cc}" \
-		CPP="%{__cpp}" \
-		M=$PWD O=$PWD/o \
-		%{?with_verbose:V=1}
-	mv drbd{,-$cfg}.ko
-done
+%build_kernel_modules -m drbd EXTRA_CFLAGS="-DNO_MORE_DEV_FS"
 %endif
 
 %install
@@ -145,13 +125,7 @@ install -d $RPM_BUILD_ROOT{/sbin,%{_mandir}/man{5,8},%{_sysconfdir}} \
 	$RPM_BUILD_ROOT{/etc/rc.d/init.d,/etc/ha.d/resource.d}
 
 %if %{with kernel}
-install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/misc
-install drbd/drbd-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist}.ko \
-		$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc/drbd.ko
-%if %{with smp} && %{with dist_kernel}
-install drbd/drbd-smp.ko \
-		$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/misc/drbd.ko
-%endif
+%install_kernel_modules -m drbd/drbd -d misc
 %endif
 
 %if %{with userspace}
@@ -204,12 +178,12 @@ fi
 %files -n kernel%{_alt_kernel}-block-drbd
 %defattr(644,root,root,755)
 %doc ChangeLog README
-/lib/modules/%{_kernel_ver}/misc/*
+/lib/modules/%{_kernel_ver}/misc/drbd.ko*
 
 %if %{with smp} && %{with dist_kernel}
 %files -n kernel%{_alt_kernel}-smp-block-drbd
 %defattr(644,root,root,755)
 %doc ChangeLog README
-/lib/modules/%{_kernel_ver}smp/misc/*
+/lib/modules/%{_kernel_ver}smp/misc/drbd.ko*
 %endif
 %endif
