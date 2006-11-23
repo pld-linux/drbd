@@ -10,7 +10,7 @@
 %undefine	with_smp
 %endif
 
-%define	_rel	2
+%define	_rel	3
 Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl):	drbd jest urz±dzeniem blokowym dla klastrów o wysokiej niezawodno¶ci
 Name:		drbd
@@ -23,7 +23,7 @@ Source0:	http://oss.linbit.com/drbd/0.7/%{name}-%{version}.tar.gz
 URL:		http://www.drbd.org/
 BuildRequires:	bison
 BuildRequires:	flex
-%{?with_dist_kernel:BuildRequires:	kernel-module-build}
+%{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build}
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -59,7 +59,7 @@ Setup tool and init scripts for DRBD.
 %description -n drbdsetup -l pl
 Narzêdzie konfiguracyjne i skrypty startowe dla DRBD.
 
-%package -n kernel-block-drbd
+%package -n kernel%{_alt_kernel}-block-drbd
 Summary:	Kernel module with drbd - a block device designed to build high availibility clusters
 Summary(pl):	Modu³ j±dra do drbd - urz±dzenia blokowego dla klastrów o wysokiej niezawodno¶ci
 Release:	%{_rel}@%{_kernel_ver_str}
@@ -68,17 +68,17 @@ Group:		Base/Kernel
 Requires(post,postun):	/sbin/depmod
 Requires:	drbdsetup
 
-%description -n kernel-block-drbd
+%description -n kernel%{_alt_kernel}-block-drbd
 drbd is a block device which is designed to build high availability
 clusters. This is done by mirroring a whole block device via (a
 dedicated) network. You could see it as a network RAID1.
 
-%description -n kernel-block-drbd -l pl
+%description -n kernel%{_alt_kernel}-block-drbd -l pl
 drbd jest urz±dzeniem blokowym zaprojektowanym dla klastrów o wysokiej
 niezawodno¶ci. drbd dzia³a jako mirroring ca³ego urz±dzenia blokowego
 przez (dedykowan±) sieæ. Mo¿e byæ widoczny jako sieciowy RAID1.
 
-%package -n kernel-smp-block-drbd
+%package -n kernel%{_alt_kernel}-smp-block-drbd
 Summary:	SMP kernel module with drbd - a block device designed to build high availibility clusters
 Summary(pl):	Wersja SMP Modu³u j±dra do drbd - urz±dzenia blokowego dla klastrów o wysokiej niezawodno¶ci
 Release:	%{_rel}@%{_kernel_ver_str}
@@ -87,12 +87,12 @@ Group:		Base/Kernel
 Requires(post,postun):	/sbin/depmod
 Requires:	drbdsetup
 
-%description -n kernel-smp-block-drbd
+%description -n kernel%{_alt_kernel}-smp-block-drbd
 drbd is a block device which is designed to build high availability
 clusters. This is done by mirroring a whole block device via (a
 dedicated) network. You could see it as a network RAID1.
 
-%description -n kernel-smp-block-drbd -l pl
+%description -n kernel%{_alt_kernel}-smp-block-drbd -l pl
 drbd jest urz±dzeniem blokowym zaprojektowanym dla klastrów o wysokiej
 niezawodno¶ci. drbd dzia³a jako mirroring ca³ego urz±dzenia blokowego
 przez (dedykowan±) sieæ. Mo¿e byæ widoczny jako sieciowy RAID1.
@@ -168,16 +168,16 @@ install documentation/*.8 $RPM_BUILD_ROOT%{_mandir}/man8
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post -n kernel-block-drbd
+%post -n kernel%{_alt_kernel}-block-drbd
 %depmod %{_kernel_ver}
 
-%postun -n kernel-block-drbd
+%postun -n kernel%{_alt_kernel}-block-drbd
 %depmod %{_kernel_ver}
 
-%post -n kernel-smp-block-drbd
+%post -n kernel%{_alt_kernel}-smp-block-drbd
 %depmod %{_kernel_ver}smp
 
-%postun -n kernel-smp-block-drbd
+%postun -n kernel%{_alt_kernel}-smp-block-drbd
 %depmod %{_kernel_ver}smp
 
 %post -n drbdsetup
@@ -201,13 +201,13 @@ fi
 %endif
 
 %if %{with kernel}
-%files -n kernel-block-drbd
+%files -n kernel%{_alt_kernel}-block-drbd
 %defattr(644,root,root,755)
 %doc ChangeLog README
 /lib/modules/%{_kernel_ver}/misc/*
 
 %if %{with smp} && %{with dist_kernel}
-%files -n kernel-smp-block-drbd
+%files -n kernel%{_alt_kernel}-smp-block-drbd
 %defattr(644,root,root,755)
 %doc ChangeLog README
 /lib/modules/%{_kernel_ver}smp/misc/*
