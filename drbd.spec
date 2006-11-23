@@ -24,7 +24,7 @@ URL:		http://www.drbd.org/
 BuildRequires:	bison
 BuildRequires:	flex
 %{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build}
-BuildRequires:	rpmbuild(macros) >= 1.268
+BuildRequires:	rpmbuild(macros) >= 1.308
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
