@@ -22,8 +22,10 @@ Source0:	http://oss.linbit.com/drbd/0.7/%{name}-%{version}.tar.gz
 # Source0-md5:	589626e0c62d314d3bbe78275b9e7d2d
 Patch0:		%{name}-Makefile.patch
 URL:		http://www.drbd.org/
+%if %{with userspace}
 BuildRequires:	bison
 BuildRequires:	flex
+%endif
 %{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build}
 BuildRequires:	rpmbuild(macros) >= 1.330
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
