@@ -26,6 +26,9 @@ Group:		Base/Kernel
 Source0:	http://oss.linbit.com/drbd/0.7/%{name}-%{version}.tar.gz
 # Source0-md5:	589626e0c62d314d3bbe78275b9e7d2d
 Patch0:		%{name}-Makefile.patch
+# based on http://members.home.nl/maarten/drbd-0.7.22-2.6.19.patch but compliant
+# with older kernels
+Patch1:		%{name}-0.7.22-2.6.19-friendly.patch
 URL:		http://www.drbd.org/
 %if %{with userspace}
 BuildRequires:	bison
@@ -108,6 +111,7 @@ przez (dedykowan±) sieæ. Mo¿e byæ widoczny jako sieciowy RAID1.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
 %if %{with userspace}
