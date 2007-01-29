@@ -15,20 +15,17 @@
 %undefine	with_smp
 %endif
 
-%define	_rel	5
+%define	_rel	1
 Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl):	drbd jest urz±dzeniem blokowym dla klastrów o wysokiej niezawodno¶ci
 Name:		drbd
-Version:	0.7.22
+Version:	8.0.0
 Release:	%{_rel}
 License:	GPL
 Group:		Base/Kernel
-Source0:	http://oss.linbit.com/drbd/0.7/%{name}-%{version}.tar.gz
-# Source0-md5:	589626e0c62d314d3bbe78275b9e7d2d
+Source0:	http://oss.linbit.com/drbd/8.0/%{name}-%{version}.tar.gz
+# Source0-md5:	ead0c43fc8c4fcc367a5c736272493d8
 Patch0:		%{name}-Makefile.patch
-# based on http://members.home.nl/maarten/drbd-0.7.22-2.6.19.patch but compliant
-# with older kernels
-Patch1:		%{name}-0.7.22-2.6.19-friendly.patch
 URL:		http://www.drbd.org/
 %if %{with userspace}
 BuildRequires:	bison
@@ -111,7 +108,6 @@ przez (dedykowan±) sieæ. Mo¿e byæ widoczny jako sieciowy RAID1.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
 
 %build
 %if %{with userspace}
@@ -127,7 +123,7 @@ cd drbd
 sed -i -e 's#$(CONFIG_BLK_DEV_DRBD)#m#g' Makefile-2.6
 ln -sf Makefile-2.6 Makefile
 # kernel module(s)
-%build_kernel_modules -m drbd EXTRA_CFLAGS="-DNO_MORE_DEV_FS"
+%build_kernel_modules -m drbd
 %endif
 
 %install
