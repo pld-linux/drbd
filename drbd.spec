@@ -17,7 +17,7 @@
 
 %define	_rel	1
 Summary:	drbd is a block device designed to build high availibility clusters
-Summary(pl):	drbd jest urz±dzeniem blokowym dla klastrów o wysokiej niezawodno¶ci
+Summary(pl.UTF-8):   drbd jest urzÄ…dzeniem blokowym dla klastrÃ³w o wysokiej niezawodnoÅ›ci
 Name:		drbd
 Version:	8.0.0
 Release:	%{_rel}
@@ -40,22 +40,22 @@ drbd is a block device which is designed to build high availability
 clusters. This is done by mirroring a whole block device via (a
 dedicated) network. You could see it as a network RAID1.
 
-%description -l pl
-drbd jest urz±dzeniem blokowym zaprojektowanym dla klastrów o wysokiej
-niezawodno¶ci. drbd dzia³a jako mirroring ca³ego urz±dzenia blokowego
-przez (dedykowan±) sieæ. Mo¿e byæ widoczny jako sieciowy RAID1.
+%description -l pl.UTF-8
+drbd jest urzÄ…dzeniem blokowym zaprojektowanym dla klastrÃ³w o wysokiej
+niezawodnoÅ›ci. drbd dziaÅ‚a jako mirroring caÅ‚ego urzÄ…dzenia blokowego
+przez (dedykowanÄ…) sieÄ‡. MoÅ¼e byÄ‡ widoczny jako sieciowy RAID1.
 
-%description -l pt_BR
-O DRBD é um dispositivo de bloco que é projetado para construir
-clusters de Alta Disponibilidade. Isto é feito espelhando um
-dispositivo de bloco inteiro via rede (dedicada ou não). Pode ser
-visto como um RAID 1 via rede. Este pacote contém utilitários para
+%description -l pt_BR.UTF-8
+O DRBD Ã© um dispositivo de bloco que Ã© projetado para construir
+clusters de Alta Disponibilidade. Isto Ã© feito espelhando um
+dispositivo de bloco inteiro via rede (dedicada ou nÃ£o). Pode ser
+visto como um RAID 1 via rede. Este pacote contÃ©m utilitÃ¡rios para
 gerenciar dispositivos DRBD.
 
 %package -n drbdsetup
 Summary:	Setup tool and scripts for DRBD
-Summary(pl):	Narzêdzie konfiguracyjne i skrypty dla DRBD
-Summary(pt_BR):	Utilitários para gerenciar dispositivos DRBD
+Summary(pl.UTF-8):   NarzÄ™dzie konfiguracyjne i skrypty dla DRBD
+Summary(pt_BR.UTF-8):   UtilitÃ¡rios para gerenciar dispositivos DRBD
 Group:		Applications/System
 Requires(post,preun):	/sbin/chkconfig
 Requires:	rc-scripts
@@ -64,12 +64,12 @@ Conflicts:	drbdsetup24
 %description -n drbdsetup
 Setup tool and init scripts for DRBD.
 
-%description -n drbdsetup -l pl
-Narzêdzie konfiguracyjne i skrypty startowe dla DRBD.
+%description -n drbdsetup -l pl.UTF-8
+NarzÄ™dzie konfiguracyjne i skrypty startowe dla DRBD.
 
 %package -n kernel%{_alt_kernel}-block-drbd
 Summary:	Kernel module with drbd - a block device designed to build high availibility clusters
-Summary(pl):	Modu³ j±dra do drbd - urz±dzenia blokowego dla klastrów o wysokiej niezawodno¶ci
+Summary(pl.UTF-8):   ModuÅ‚ jÄ…dra do drbd - urzÄ…dzenia blokowego dla klastrÃ³w o wysokiej niezawodnoÅ›ci
 Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 %{?with_dist_kernel:%requires_releq_kernel_up}
@@ -81,14 +81,14 @@ drbd is a block device which is designed to build high availability
 clusters. This is done by mirroring a whole block device via (a
 dedicated) network. You could see it as a network RAID1.
 
-%description -n kernel%{_alt_kernel}-block-drbd -l pl
-drbd jest urz±dzeniem blokowym zaprojektowanym dla klastrów o wysokiej
-niezawodno¶ci. drbd dzia³a jako mirroring ca³ego urz±dzenia blokowego
-przez (dedykowan±) sieæ. Mo¿e byæ widoczny jako sieciowy RAID1.
+%description -n kernel%{_alt_kernel}-block-drbd -l pl.UTF-8
+drbd jest urzÄ…dzeniem blokowym zaprojektowanym dla klastrÃ³w o wysokiej
+niezawodnoÅ›ci. drbd dziaÅ‚a jako mirroring caÅ‚ego urzÄ…dzenia blokowego
+przez (dedykowanÄ…) sieÄ‡. MoÅ¼e byÄ‡ widoczny jako sieciowy RAID1.
 
 %package -n kernel%{_alt_kernel}-smp-block-drbd
 Summary:	SMP kernel module with drbd - a block device designed to build high availibility clusters
-Summary(pl):	Wersja SMP Modu³u j±dra do drbd - urz±dzenia blokowego dla klastrów o wysokiej niezawodno¶ci
+Summary(pl.UTF-8):   Wersja SMP ModuÅ‚u jÄ…dra do drbd - urzÄ…dzenia blokowego dla klastrÃ³w o wysokiej niezawodnoÅ›ci
 Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 %{?with_dist_kernel:%requires_releq_kernel_smp}
@@ -100,10 +100,10 @@ drbd is a block device which is designed to build high availability
 clusters. This is done by mirroring a whole block device via (a
 dedicated) network. You could see it as a network RAID1.
 
-%description -n kernel%{_alt_kernel}-smp-block-drbd -l pl
-drbd jest urz±dzeniem blokowym zaprojektowanym dla klastrów o wysokiej
-niezawodno¶ci. drbd dzia³a jako mirroring ca³ego urz±dzenia blokowego
-przez (dedykowan±) sieæ. Mo¿e byæ widoczny jako sieciowy RAID1.
+%description -n kernel%{_alt_kernel}-smp-block-drbd -l pl.UTF-8
+drbd jest urzÄ…dzeniem blokowym zaprojektowanym dla klastrÃ³w o wysokiej
+niezawodnoÅ›ci. drbd dziaÅ‚a jako mirroring caÅ‚ego urzÄ…dzenia blokowego
+przez (dedykowanÄ…) sieÄ‡. MoÅ¼e byÄ‡ widoczny jako sieciowy RAID1.
 
 %prep
 %setup -q
