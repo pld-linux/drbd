@@ -17,7 +17,7 @@
 
 %define	_rel	5
 Summary:	drbd is a block device designed to build high availibility clusters
-Summary(pl.UTF-8):   drbd jest urządzeniem blokowym dla klastrów o wysokiej niezawodności
+Summary(pl.UTF-8):	drbd jest urządzeniem blokowym dla klastrów o wysokiej niezawodności
 Name:		drbd
 Version:	0.7.22
 Release:	%{_rel}
@@ -57,8 +57,8 @@ gerenciar dispositivos DRBD.
 
 %package -n drbdsetup
 Summary:	Setup tool and scripts for DRBD
-Summary(pl.UTF-8):   Narzędzie konfiguracyjne i skrypty dla DRBD
-Summary(pt_BR.UTF-8):   Utilitários para gerenciar dispositivos DRBD
+Summary(pl.UTF-8):	Narzędzie konfiguracyjne i skrypty dla DRBD
+Summary(pt_BR.UTF-8):	Utilitários para gerenciar dispositivos DRBD
 Group:		Applications/System
 Requires(post,preun):	/sbin/chkconfig
 Requires:	rc-scripts
@@ -72,7 +72,7 @@ Narzędzie konfiguracyjne i skrypty startowe dla DRBD.
 
 %package -n kernel%{_alt_kernel}-block-drbd
 Summary:	Kernel module with drbd - a block device designed to build high availibility clusters
-Summary(pl.UTF-8):   Moduł jądra do drbd - urządzenia blokowego dla klastrów o wysokiej niezawodności
+Summary(pl.UTF-8):	Moduł jądra do drbd - urządzenia blokowego dla klastrów o wysokiej niezawodności
 Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 %{?with_dist_kernel:%requires_releq_kernel_up}
@@ -91,7 +91,7 @@ przez (dedykowaną) sieć. Może być widoczny jako sieciowy RAID1.
 
 %package -n kernel%{_alt_kernel}-smp-block-drbd
 Summary:	SMP kernel module with drbd - a block device designed to build high availibility clusters
-Summary(pl.UTF-8):   Wersja SMP Modułu jądra do drbd - urządzenia blokowego dla klastrów o wysokiej niezawodności
+Summary(pl.UTF-8):	Wersja SMP Modułu jądra do drbd - urządzenia blokowego dla klastrów o wysokiej niezawodności
 Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 %{?with_dist_kernel:%requires_releq_kernel_smp}
