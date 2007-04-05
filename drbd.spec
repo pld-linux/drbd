@@ -2,6 +2,7 @@
 # Conditional build:
 %bcond_without	dist_kernel	# allow non-distribution kernel
 %bcond_without	kernel		# don't build kernel modules
+%bcond_without	up		# don't build UP module
 %bcond_without	smp		# don't build SMP module
 %bcond_without	userspace	# don't build userspace module
 %bcond_with	verbose		# verbose build (V=1)
@@ -19,12 +20,12 @@
 Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl.UTF-8):   drbd jest urządzeniem blokowym dla klastrów o wysokiej niezawodności
 Name:		drbd
-Version:	8.0.0
+Version:	8.0.1
 Release:	%{_rel}
 License:	GPL
 Group:		Base/Kernel
 Source0:	http://oss.linbit.com/drbd/8.0/%{name}-%{version}.tar.gz
-# Source0-md5:	ead0c43fc8c4fcc367a5c736272493d8
+# Source0-md5:	57e22430affeb0337c7e5df62093f9e8
 Patch0:		%{name}-Makefile.patch
 URL:		http://www.drbd.org/
 %if %{with userspace}
@@ -132,7 +133,7 @@ install -d $RPM_BUILD_ROOT{/sbin,%{_mandir}/man{5,8},%{_sysconfdir}} \
 	$RPM_BUILD_ROOT{/etc/rc.d/init.d,/etc/ha.d/resource.d}
 
 %if %{with kernel}
-%install_kernel_modules -m drbd/drbd -d misc
+%install_kernel_modules -m drbd/drbd -d block
 %endif
 
 %if %{with userspace}
@@ -185,12 +186,12 @@ fi
 %files -n kernel%{_alt_kernel}-block-drbd
 %defattr(644,root,root,755)
 %doc ChangeLog README
-/lib/modules/%{_kernel_ver}/misc/drbd.ko*
+/lib/modules/%{_kernel_ver}/block/drbd.ko*
 
 %if %{with smp} && %{with dist_kernel}
 %files -n kernel%{_alt_kernel}-smp-block-drbd
 %defattr(644,root,root,755)
 %doc ChangeLog README
-/lib/modules/%{_kernel_ver}smp/misc/drbd.ko*
+/lib/modules/%{_kernel_ver}smp/block/drbd.ko*
 %endif
 %endif
