@@ -14,12 +14,12 @@
 Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl.UTF-8):   drbd jest urządzeniem blokowym dla klastrów o wysokiej niezawodności
 Name:		drbd
-Version:	8.0.1
+Version:	8.0.3
 Release:	%{_rel}
 License:	GPL
 Group:		Base/Kernel
 Source0:	http://oss.linbit.com/drbd/8.0/%{name}-%{version}.tar.gz
-# Source0-md5:	57e22430affeb0337c7e5df62093f9e8
+# Source0-md5:	d7a2239f75468a99c2ce63d581d750e1
 Patch0:		%{name}-Makefile.patch
 URL:		http://www.drbd.org/
 %if %{with userspace}
