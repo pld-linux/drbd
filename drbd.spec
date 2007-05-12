@@ -112,7 +112,7 @@ install -d $RPM_BUILD_ROOT{/sbin,%{_mandir}/man{5,8},%{_sysconfdir}} \
 %endif
 
 %if %{with userspace}
-install user/{drbdadm,drbdsetup} $RPM_BUILD_ROOT/sbin
+install user/{drbdadm,drbdmeta,drbdsetup} $RPM_BUILD_ROOT/sbin
 install scripts/drbd.conf $RPM_BUILD_ROOT%{_sysconfdir}
 install scripts/drbd $RPM_BUILD_ROOT/etc/rc.d/init.d
 
