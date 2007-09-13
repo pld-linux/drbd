@@ -14,12 +14,12 @@
 Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl.UTF-8):	drbd jest urządzeniem blokowym dla klastrów o wysokiej niezawodności
 Name:		drbd
-Version:	8.0.5
+Version:	8.0.6
 Release:	%{_rel}
 License:	GPL
 Group:		Base/Kernel
 Source0:	http://oss.linbit.com/drbd/8.0/%{name}-%{version}.tar.gz
-# Source0-md5:	b5463772f1749e86c8c29e56b0e9938b
+# Source0-md5:	a91dd9b9526e087507e21521c10c5828
 Patch0:		%{name}-Makefile.patch
 URL:		http://www.drbd.org/
 %if %{with userspace}
@@ -53,7 +53,11 @@ Summary(pl.UTF-8):	Narzędzie konfiguracyjne i skrypty dla DRBD
 Summary(pt_BR.UTF-8):	Utilitários para gerenciar dispositivos DRBD
 Group:		Applications/System
 Requires(post,preun):	/sbin/chkconfig
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/usr/sbin/groupadd
+Requires(postun):	/usr/sbin/groupdel
 Requires:	rc-scripts
+Provides:	group(haclient)
 Conflicts:	drbdsetup24
 
 %description -n drbdsetup
@@ -131,6 +135,9 @@ rm -rf $RPM_BUILD_ROOT
 %postun -n kernel%{_alt_kernel}-block-drbd
 %depmod %{_kernel_ver}
 
+%pre -n drbdsetup
+%groupadd -g 60 haclient
+
 %post -n drbdsetup
 /sbin/chkconfig --add drbd
 %service drbd restart
@@ -141,10 +148,18 @@ if [ "$1" = "0" ]; then
 	/sbin/chkconfig --del drbd
 fi
 
+%postun -n drbdsetup
+if [ "$1" = "0" ]; then
+	%groupremove haclient
+fi
+
+
 %if %{with userspace}
 %files -n drbdsetup
 %defattr(644,root,root,755)
-%attr(755,root,root) /sbin/*
+%attr(755,root,root) /sbin/drbdadm
+%attr(2754,root,haclient) /sbin/drbdsetup
+%attr(2754,root,haclient) /sbin/drbdmeta
 %attr(754,root,root) /etc/rc.d/init.d/drbd
 %attr(755,root,root) %{_sysconfdir}/ha.d/resource.d/drbddisk
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/drbd.conf
