@@ -14,12 +14,12 @@
 Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl.UTF-8):	drbd jest urządzeniem blokowym dla klastrów o wysokiej niezawodności
 Name:		drbd
-Version:	0.7.24
+Version:	8.0.5
 Release:	%{_rel}
 License:	GPL
 Group:		Base/Kernel
-Source0:	http://oss.linbit.com/drbd/0.7/%{name}-%{version}.tar.gz
-# Source0-md5:	b2c7335514a355b874a634dc12b22522
+Source0:	http://oss.linbit.com/drbd/8.0/%{name}-%{version}.tar.gz
+# Source0-md5:	b5463772f1749e86c8c29e56b0e9938b
 Patch0:		%{name}-Makefile.patch
 URL:		http://www.drbd.org/
 %if %{with userspace}
@@ -99,7 +99,7 @@ cd drbd
 sed -i -e 's#$(CONFIG_BLK_DEV_DRBD)#m#g' Makefile-2.6
 ln -sf Makefile-2.6 Makefile
 # kernel module(s)
-%build_kernel_modules -m drbd EXTRA_CFLAGS="-DNO_MORE_DEV_FS"
+%build_kernel_modules -m drbd
 %endif
 
 %install
@@ -112,7 +112,7 @@ install -d $RPM_BUILD_ROOT{/sbin,%{_mandir}/man{5,8},%{_sysconfdir}} \
 %endif
 
 %if %{with userspace}
-install user/{drbdadm,drbdsetup} $RPM_BUILD_ROOT/sbin
+install user/{drbdadm,drbdmeta,drbdsetup} $RPM_BUILD_ROOT/sbin
 install scripts/drbd.conf $RPM_BUILD_ROOT%{_sysconfdir}
 install scripts/drbd $RPM_BUILD_ROOT/etc/rc.d/init.d
 
