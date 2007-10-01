@@ -20,12 +20,12 @@
 Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl):	drbd jest urz±dzeniem blokowym dla klastrów o wysokiej niezawodno¶ci
 Name:		drbd
-Version:	0.7.22
+Version:	0.7.24
 Release:	%{_rel}
 License:	GPL
 Group:		Base/Kernel
 Source0:	http://oss.linbit.com/drbd/0.7/%{name}-%{version}.tar.gz
-# Source0-md5:	589626e0c62d314d3bbe78275b9e7d2d
+# Source0-md5:	b2c7335514a355b874a634dc12b22522
 Patch0:		%{name}-Makefile.patch
 # based on http://members.home.nl/maarten/drbd-0.7.22-2.6.19.patch but compliant
 # with older kernels
@@ -50,8 +50,7 @@ niezawodno¶ci. drbd dzia³a jako mirroring ca³ego urz±dzenia blokowego
 przez (dedykowan±) sieæ. Mo¿e byæ widoczny jako sieciowy RAID1.
 
 %description -l pt_BR
-O DRBD é um dispositivo de bloco que é projetado para construir
-clusters de Alta Disponibilidade. Isto é feito espelhando um
+O DRBD é um dispositivo de bloco que é projetado para construirclusters de Alta Disponibilidade. Isto é feito espelhando um
 dispositivo de bloco inteiro via rede (dedicada ou não). Pode ser
 visto como um RAID 1 via rede. Este pacote contém utilitários para
 gerenciar dispositivos DRBD.
@@ -112,7 +111,7 @@ przez (dedykowan±) sieæ. Mo¿e byæ widoczny jako sieciowy RAID1.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
+#%patch1 -p1
 
 %build
 %if %{with userspace}
