@@ -50,7 +50,8 @@ niezawodno¶ci. drbd dzia³a jako mirroring ca³ego urz±dzenia blokowego
 przez (dedykowan±) sieæ. Mo¿e byæ widoczny jako sieciowy RAID1.
 
 %description -l pt_BR
-O DRBD é um dispositivo de bloco que é projetado para construirclusters de Alta Disponibilidade. Isto é feito espelhando um
+O DRBD é um dispositivo de bloco que é projetado para construir
+clusters de Alta Disponibilidade. Isto é feito espelhando um
 dispositivo de bloco inteiro via rede (dedicada ou não). Pode ser
 visto como um RAID 1 via rede. Este pacote contém utilitários para
 gerenciar dispositivos DRBD.
