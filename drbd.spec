@@ -22,7 +22,7 @@
 %undefine	with_userspace
 %endif
 
-%define		_rel	56
+%define		_rel	57
 %define		pname	drbd
 Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl):	drbd jest urz±dzeniem blokowym dla klastrów o wysokiej niezawodno¶ci
