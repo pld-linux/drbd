@@ -6,21 +6,32 @@
 %bcond_with	verbose		# verbose build (V=1)
 %bcond_with	grsec_kernel	# build for kernel-grsecurity
 #
+%ifarch sparc
+%undefine	with_smp
+%endif
+
+%if %{without kernel}
+%undefine	with_dist_kernel
+%endif
 %if %{with kernel} && %{with dist_kernel} && %{with grsec_kernel}
 %define	alt_kernel	grsecurity
 %endif
-#
-%define	_rel	1
+%if "%{_alt_kernel}" != "%{nil}"
+%undefine	with_userspace
+%endif
+
+%define		_rel	2
+%define		pname	drbd
 Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl.UTF-8):	drbd jest urządzeniem blokowym dla klastrów o wysokiej niezawodności
-Name:		drbd
+Name:		%{pname}%{_alt_kernel}
 Version:	8.2.1
 Release:	%{_rel}
 License:	GPL
 Group:		Base/Kernel
-Source0:	http://oss.linbit.com/drbd/8.2/%{name}-%{version}.tar.gz
+Source0:	http://oss.linbit.com/drbd/8.2/%{pname}-%{version}.tar.gz
 # Source0-md5:	345c1056b2033184a7935c1bb79cc57e
-Patch0:		%{name}-Makefile.patch
+Patch0:		%{pname}-Makefile.patch
 URL:		http://www.drbd.org/
 %if %{with userspace}
 BuildRequires:	bison
@@ -86,7 +97,7 @@ niezawodności. drbd działa jako mirroring całego urządzenia blokowego
 przez (dedykowaną) sieć. Może być widoczny jako sieciowy RAID1.
 
 %prep
-%setup -q
+%setup -q -n %{pname}-%{version}
 %patch0 -p1
 
 %build
