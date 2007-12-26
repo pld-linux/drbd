@@ -22,30 +22,25 @@
 %undefine	with_userspace
 %endif
 
-%define		_rel	57
+%define		_rel	1
 %define		pname	drbd
 Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl.UTF-8):	drbd jest urządzeniem blokowym dla klastrów o wysokiej niezawodności
 Name:		%{pname}%{_alt_kernel}
-Version:	0.7.24
+Version:	8.2.1
 Release:	%{_rel}
 License:	GPL
 Group:		Base/Kernel
-Source0:	http://oss.linbit.com/drbd/0.7/%{pname}-%{version}.tar.gz
-# Source0-md5:	b2c7335514a355b874a634dc12b22522
+Source0:	http://oss.linbit.com/drbd/8.2/%{pname}-%{version}.tar.gz
+# Source0-md5:	345c1056b2033184a7935c1bb79cc57e
 Patch0:		%{pname}-Makefile.patch
-# based on http://members.home.nl/maarten/drbd-0.7.22-2.6.19.patch but compliant
-# with older kernels
-Patch1:		%{pname}-0.7.22-2.6.19-friendly.patch
 URL:		http://www.drbd.org/
 %if %{with userspace}
 BuildRequires:	bison
 BuildRequires:	flex
 %endif
 %{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build}
-%if %{with kernel}
-BuildRequires:	rpmbuild(macros) >= 1.330
-%endif
+BuildRequires:	rpmbuild(macros) >= 1.379
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -71,7 +66,11 @@ Summary(pl.UTF-8):	Narzędzie konfiguracyjne i skrypty dla DRBD
 Summary(pt_BR.UTF-8):	Utilitários para gerenciar dispositivos DRBD
 Group:		Applications/System
 Requires(post,preun):	/sbin/chkconfig
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/usr/sbin/groupadd
+Requires(postun):	/usr/sbin/groupdel
 Requires:	rc-scripts
+Provides:	group(haclient)
 Conflicts:	drbdsetup24
 
 %description -n drbdsetup
@@ -137,7 +136,7 @@ cd drbd
 sed -i -e 's#$(CONFIG_BLK_DEV_DRBD)#m#g' Makefile-2.6
 ln -sf Makefile-2.6 Makefile
 # kernel module(s)
-%build_kernel_modules -m drbd EXTRA_CFLAGS="-DNO_MORE_DEV_FS"
+%build_kernel_modules -m drbd
 %endif
 
 %install
@@ -146,11 +145,11 @@ install -d $RPM_BUILD_ROOT{/sbin,%{_mandir}/man{5,8},%{_sysconfdir}} \
 	$RPM_BUILD_ROOT{/etc/rc.d/init.d,/etc/ha.d/resource.d}
 
 %if %{with kernel}
-%install_kernel_modules -m drbd/drbd -d misc
+%install_kernel_modules -m drbd/drbd -d block
 %endif
 
 %if %{with userspace}
-install user/{drbdadm,drbdsetup} $RPM_BUILD_ROOT/sbin
+install user/{drbdadm,drbdmeta,drbdsetup} $RPM_BUILD_ROOT/sbin
 install scripts/drbd.conf $RPM_BUILD_ROOT%{_sysconfdir}
 install scripts/drbd $RPM_BUILD_ROOT/etc/rc.d/init.d
 
@@ -175,6 +174,9 @@ rm -rf $RPM_BUILD_ROOT
 %postun -n kernel%{_alt_kernel}-smp-block-drbd
 %depmod %{_kernel_ver}smp
 
+%pre -n drbdsetup
+%groupadd -g 60 haclient
+
 %post -n drbdsetup
 /sbin/chkconfig --add drbd
 %service drbd restart
@@ -185,10 +187,18 @@ if [ "$1" = "0" ]; then
 	/sbin/chkconfig --del drbd
 fi
 
+%postun -n drbdsetup
+if [ "$1" = "0" ]; then
+	%groupremove haclient
+fi
+
+
 %if %{with userspace}
 %files -n drbdsetup
 %defattr(644,root,root,755)
-%attr(755,root,root) /sbin/*
+%attr(755,root,root) /sbin/drbdadm
+%attr(2754,root,haclient) /sbin/drbdsetup
+%attr(2754,root,haclient) /sbin/drbdmeta
 %attr(754,root,root) /etc/rc.d/init.d/drbd
 %attr(755,root,root) %{_sysconfdir}/ha.d/resource.d/drbddisk
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/drbd.conf
@@ -200,13 +210,13 @@ fi
 %files -n kernel%{_alt_kernel}-block-drbd
 %defattr(644,root,root,755)
 %doc ChangeLog README
-/lib/modules/%{_kernel_ver}/misc/drbd.ko*
+/lib/modules/%{_kernel_ver}/block/drbd.ko*
 %endif
 
 %if %{with smp} && %{with dist_kernel}
 %files -n kernel%{_alt_kernel}-smp-block-drbd
 %defattr(644,root,root,755)
 %doc ChangeLog README
-/lib/modules/%{_kernel_ver}smp/misc/drbd.ko*
+/lib/modules/%{_kernel_ver}smp/block/drbd.ko*
 %endif
 %endif
