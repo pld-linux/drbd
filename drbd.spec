@@ -120,12 +120,12 @@ przez (dedykowaną) sieć. Może być widoczny jako sieciowy RAID1.
 %prep
 %setup -q -n %{pname}-%{version}
 %patch0 -p1
-#%patch1 -p1
 
 %build
 %if %{with userspace}
 %{__make} tools \
 	KVER=dummy \
+	KDIR=/usr/include \
 	CC="%{__cc}" \
 	OPTCFLAGS="%{rpmcflags}" \
 	LDFLAGS="%{rpmldflags}"
