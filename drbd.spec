@@ -70,6 +70,7 @@ Requires(postun):	/usr/sbin/groupdel
 Requires:	rc-scripts
 Provides:	group(haclient)
 Conflicts:	drbdsetup24
+Obsoletes:	drbdsetup8
 
 %description -n drbdsetup
 Setup tool and init scripts for DRBD.
