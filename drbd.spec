@@ -2,24 +2,18 @@
 # Conditional build:
 %bcond_without	dist_kernel	# allow non-distribution kernel
 %bcond_without	kernel		# don't build kernel modules
-%bcond_without	up		# don't build UP module
-%bcond_without	smp		# don't build SMP module
 %bcond_without	userspace	# don't build userspace module
 %bcond_with	verbose		# verbose build (V=1)
-%bcond_with	grsec_kernel	# build for kernel-grsecurity
-#
-%ifarch sparc
-%undefine	with_smp
-%endif
 
 %if %{without kernel}
 %undefine	with_dist_kernel
 %endif
-%if %{with kernel} && %{with dist_kernel} && %{with grsec_kernel}
-%define	alt_kernel	grsecurity
-%endif
 %if "%{_alt_kernel}" != "%{nil}"
 %undefine	with_userspace
+%endif
+%if %{without userspace}
+# nothing to be placed to debuginfo package
+%define		_enable_debug_packages	0
 %endif
 
 %define		_rel	1
@@ -40,7 +34,7 @@ BuildRequires:	bison
 BuildRequires:	flex
 %endif
 %{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build}
-BuildRequires:	rpmbuild(macros) >= 1.379
+BuildRequires:	rpmbuild(macros) >= 1.452
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -82,11 +76,12 @@ Narzędzie konfiguracyjne i skrypty startowe dla DRBD.
 %package -n kernel%{_alt_kernel}-block-drbd
 Summary:	Kernel module with drbd - a block device designed to build high availibility clusters
 Summary(pl.UTF-8):	Moduł jądra do drbd - urządzenia blokowego dla klastrów o wysokiej niezawodności
-Release:	%{_rel}@%{_kernel_ver_str}
+Release:	%{_rel}@%{_kernel_vermagic}
 Group:		Base/Kernel
-%{?with_dist_kernel:%requires_releq_kernel_up}
+%{?with_dist_kernel:Requires:	kernel%{_alt_kernel}(vermagic) = %{_kernel_ver}}
 Requires(post,postun):	/sbin/depmod
 Requires:	drbdsetup
+Obsoletes:	kernel%{_alt_kernel}-smp-block-drbd
 
 %description -n kernel%{_alt_kernel}-block-drbd
 drbd is a block device which is designed to build high availability
@@ -94,25 +89,6 @@ clusters. This is done by mirroring a whole block device via (a
 dedicated) network. You could see it as a network RAID1.
 
 %description -n kernel%{_alt_kernel}-block-drbd -l pl.UTF-8
-drbd jest urządzeniem blokowym zaprojektowanym dla klastrów o wysokiej
-niezawodności. drbd działa jako mirroring całego urządzenia blokowego
-przez (dedykowaną) sieć. Może być widoczny jako sieciowy RAID1.
-
-%package -n kernel%{_alt_kernel}-smp-block-drbd
-Summary:	SMP kernel module with drbd - a block device designed to build high availibility clusters
-Summary(pl.UTF-8):	Wersja SMP Modułu jądra do drbd - urządzenia blokowego dla klastrów o wysokiej niezawodności
-Release:	%{_rel}@%{_kernel_ver_str}
-Group:		Base/Kernel
-%{?with_dist_kernel:%requires_releq_kernel_smp}
-Requires(post,postun):	/sbin/depmod
-Requires:	drbdsetup
-
-%description -n kernel%{_alt_kernel}-smp-block-drbd
-drbd is a block device which is designed to build high availability
-clusters. This is done by mirroring a whole block device via (a
-dedicated) network. You could see it as a network RAID1.
-
-%description -n kernel%{_alt_kernel}-smp-block-drbd -l pl.UTF-8
 drbd jest urządzeniem blokowym zaprojektowanym dla klastrów o wysokiej
 niezawodności. drbd działa jako mirroring całego urządzenia blokowego
 przez (dedykowaną) sieć. Może być widoczny jako sieciowy RAID1.
@@ -168,12 +144,6 @@ rm -rf $RPM_BUILD_ROOT
 %postun -n kernel%{_alt_kernel}-block-drbd
 %depmod %{_kernel_ver}
 
-%post -n kernel%{_alt_kernel}-smp-block-drbd
-%depmod %{_kernel_ver}smp
-
-%postun -n kernel%{_alt_kernel}-smp-block-drbd
-%depmod %{_kernel_ver}smp
-
 %pre -n drbdsetup
 %groupadd -g 60 haclient
 
@@ -192,7 +162,6 @@ if [ "$1" = "0" ]; then
 	%groupremove haclient
 fi
 
-
 %if %{with userspace}
 %files -n drbdsetup
 %defattr(644,root,root,755)
@@ -205,17 +174,8 @@ fi
 %endif
 
 %if %{with kernel}
-%if %{with up} || %{without dist_kernel}
 %files -n kernel%{_alt_kernel}-block-drbd
 %defattr(644,root,root,755)
 %doc ChangeLog README
 /lib/modules/%{_kernel_ver}/block/drbd.ko*
-%endif
-
-%if %{with smp} && %{with dist_kernel}
-%files -n kernel%{_alt_kernel}-smp-block-drbd
-%defattr(644,root,root,755)
-%doc ChangeLog README
-/lib/modules/%{_kernel_ver}smp/block/drbd.ko*
-%endif
 %endif
