@@ -6,8 +6,7 @@
 %bcond_without	smp		# don't build SMP module
 %bcond_without	userspace	# don't build userspace module
 %bcond_with	verbose		# verbose build (V=1)
-%bcond_with	grsec_kernel	# build for kernel-grsecurity
-#
+
 %ifarch sparc
 %undefine	with_smp
 %endif
@@ -15,20 +14,21 @@
 %if %{without kernel}
 %undefine	with_dist_kernel
 %endif
-%if %{with kernel} && %{with dist_kernel} && %{with grsec_kernel}
-%define	alt_kernel	grsecurity
-%endif
 %if "%{_alt_kernel}" != "%{nil}"
 %undefine	with_userspace
 %endif
+%if %{without userspace}
+# nothing to be placed to debuginfo package
+%define		_enable_debug_packages	0
+%endif
 
-%define		_rel	1
+%define		rel		3
 %define		pname	drbd
 Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl.UTF-8):	drbd jest urządzeniem blokowym dla klastrów o wysokiej niezawodności
 Name:		%{pname}%{_alt_kernel}
 Version:	0.7.25
-Release:	%{_rel}
+Release:	%{rel}
 License:	GPL
 Group:		Base/Kernel
 Source0:	http://oss.linbit.com/drbd/0.7/%{pname}-%{version}.tar.gz
@@ -40,7 +40,7 @@ BuildRequires:	bison
 BuildRequires:	flex
 %endif
 %{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build}
-BuildRequires:	rpmbuild(macros) >= 1.379
+BuildRequires:	rpmbuild(macros) >= 1.452
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -82,9 +82,9 @@ Narzędzie konfiguracyjne i skrypty startowe dla DRBD.
 %package -n kernel%{_alt_kernel}-block-drbd
 Summary:	Kernel module with drbd - a block device designed to build high availibility clusters
 Summary(pl.UTF-8):	Moduł jądra do drbd - urządzenia blokowego dla klastrów o wysokiej niezawodności
-Release:	%{_rel}@%{_kernel_ver_str}
+Release:	%{rel}@%{_kernel_vermagic}
 Group:		Base/Kernel
-%{?with_dist_kernel:%requires_releq_kernel_up}
+%{?with_dist_kernel:Requires:	kernel%{_alt_kernel}(vermagic) = %{_kernel_ver}}
 Requires(post,postun):	/sbin/depmod
 Requires:	drbdsetup
 
@@ -101,9 +101,9 @@ przez (dedykowaną) sieć. Może być widoczny jako sieciowy RAID1.
 %package -n kernel%{_alt_kernel}-smp-block-drbd
 Summary:	SMP kernel module with drbd - a block device designed to build high availibility clusters
 Summary(pl.UTF-8):	Wersja SMP Modułu jądra do drbd - urządzenia blokowego dla klastrów o wysokiej niezawodności
-Release:	%{_rel}@%{_kernel_ver_str}
+Release:	%{rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
-%{?with_dist_kernel:%requires_releq_kernel_smp}
+%{?with_dist_kernel:Requires:	kernel%{_alt_kernel}(vermagic) = %{_kernel_ver}}
 Requires(post,postun):	/sbin/depmod
 Requires:	drbdsetup
 
@@ -191,7 +191,6 @@ fi
 if [ "$1" = "0" ]; then
 	%groupremove haclient
 fi
-
 
 %if %{with userspace}
 %files -n drbdsetup
