@@ -20,7 +20,7 @@
 %undefine	with_userspace
 %endif
 
-%define		_rel	1
+%define		_rel	2
 %define		pname	drbd
 Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl.UTF-8):	drbd jest urządzeniem blokowym dla klastrów o wysokiej niezawodności
@@ -97,6 +97,18 @@ drbd jest urządzeniem blokowym zaprojektowanym dla klastrów o wysokiej
 niezawodności. drbd działa jako mirroring całego urządzenia blokowego
 przez (dedykowaną) sieć. Może być widoczny jako sieciowy RAID1.
 
+%package -n bash-completion-drbd
+Summary:	bash-completion for drbd
+Summary(pl.UTF-8):	Bashowe uzupełnianie poleceń dla drbd
+Group:		Applications/Shells
+Requires:	bash-completion
+
+%description -n bash-completion-drbd
+This package provides bash-completion for drbd.
+
+%description -n bash-completion-drbd -l pl.UTF-8
+Ten pakiet dostarcza bashowe uzupełnianie poleceń dla drbd.
+
 %prep
 %setup -q -n %{pname}-%{version}
 %patch0 -p1
@@ -128,11 +140,11 @@ install -d $RPM_BUILD_ROOT{/sbin,%{_mandir}/man{5,8},%{_sysconfdir}} \
 %endif
 
 %if %{with userspace}
-install user/{drbdadm,drbdmeta,drbdsetup} $RPM_BUILD_ROOT/sbin
-install scripts/drbd.conf $RPM_BUILD_ROOT%{_sysconfdir}
+%{__make} install -C scripts \
+	PREFIX=$RPM_BUILD_ROOT
 install scripts/drbd $RPM_BUILD_ROOT/etc/rc.d/init.d
-
-install scripts/drbddisk $RPM_BUILD_ROOT%{_sysconfdir}/ha.d/resource.d
+rm -rf $RPM_BUILD_ROOT/etc/init.d
+install user/{drbdadm,drbdmeta,drbdsetup} $RPM_BUILD_ROOT/sbin
 
 install documentation/*.5 $RPM_BUILD_ROOT%{_mandir}/man5
 install documentation/*.8 $RPM_BUILD_ROOT%{_mandir}/man8
@@ -176,6 +188,12 @@ fi
 %attr(755,root,root) %{_sysconfdir}/ha.d/resource.d/drbddisk
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/drbd.conf
 %{_mandir}/man[58]/*
+%dir /usr/lib/drbd
+%attr(755,root,root) /usr/lib/drbd/*
+
+%files -n bash-completion-drbd
+%defattr(644,root,root,755)
+/etc/bash_completion.d/drbdadm
 %endif
 
 %if %{with kernel}
