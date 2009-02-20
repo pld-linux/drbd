@@ -1,4 +1,7 @@
 #
+# TODO:
+#  - trigger to update drbd-8.2 config
+#
 # Conditional build:
 %bcond_without	dist_kernel	# allow non-distribution kernel
 %bcond_without	kernel		# don't build kernel modules
@@ -20,17 +23,17 @@
 %undefine	with_userspace
 %endif
 
-%define		_rel	2
+%define		_rel	0.1
 %define		pname	drbd
 Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl.UTF-8):	drbd jest urządzeniem blokowym dla klastrów o wysokiej niezawodności
 Name:		%{pname}%{_alt_kernel}
-Version:	8.2.7
+Version:	8.3.0
 Release:	%{_rel}
 License:	GPL
 Group:		Base/Kernel
-Source0:	http://oss.linbit.com/drbd/8.2/%{pname}-%{version}.tar.gz
-# Source0-md5:	d0a3e4eac36fde7660467632aad9b35a
+Source0:	http://oss.linbit.com/drbd/8.3/%{pname}-%{version}.tar.gz
+# Source0-md5:	2506a472c84828efdfad236519bd6ee8
 Patch0:		%{pname}-Makefile.patch
 URL:		http://www.drbd.org/
 %if %{with userspace}
