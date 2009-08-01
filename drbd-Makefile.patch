@@ -3,12 +3,12 @@
 @@ -21,7 +21,7 @@
  
  CC = gcc
- OPTFLAGS = -O2
--CFLAGS = -g $(OPTFLAGS) -c -W -Wall -I../drbd
-+CFLAGS = -g $(OPTFLAGS) -W -Wall -I../drbd
+ OPTFLAGS = -O1
+-CFLAGS = $(OPTFLAGS) -c -W -Wall -I../drbd
++CFLAGS = $(OPTFLAGS) -W -Wall -I../drbd
  # for the netlink connector stuff <linux/connector.h>:
  drbdsetup: CFLAGS += -I$(KDIR)/include
- drbdsetup drbdmeta: CFLAGS += -fno-strict-aliasing
+ 
 @@ -43,7 +43,7 @@
  	cp $^ $@
  
