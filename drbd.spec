@@ -26,7 +26,7 @@
 %undefine	with_userspace
 %endif
 
-%define		_rel	3
+%define		_rel	4
 %define		pname	drbd
 Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl.UTF-8):	drbd jest urządzeniem blokowym dla klastrów o wysokiej niezawodności
@@ -231,5 +231,5 @@ fi
 %files -n kernel%{_alt_kernel}-block-drbd
 %defattr(644,root,root,755)
 %doc ChangeLog README
-/lib/modules/%{_kernel_ver}/block/drbd.ko*
+/lib/modules/%{_kernel_ver}/kernel/drivers/block/drbd.ko*
 %endif
