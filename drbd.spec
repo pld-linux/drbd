@@ -121,7 +121,6 @@ Ten pakiet dostarcza bashowe uzupełnianie poleceń dla drbd.
 %package -n drbd-udev
 Summary:	udev rules for drbd kernel module
 Summary(pl.UTF-8):	Reguły udev dla modułów jądra Linuksa dla drbd
-Release:	%{rel}
 Group:		Base/Kernel
 Requires:	udev-core
 
