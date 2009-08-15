@@ -1,0 +1,12 @@
+--- drbd-8.3.2/drbd/drbd_main.c~	2009-06-25 15:13:04.000000000 +0200
++++ drbd-8.3.2/drbd/drbd_main.c	2009-08-15 13:09:23.195950819 +0200
+@@ -43,7 +43,8 @@
+ #include <linux/random.h>
+ #include <linux/reboot.h>
+ #include <linux/notifier.h>
+-#ifdef HAVE_LINUX_BYTEORDER_SWABB_H
++#include <linux/version.h>
++#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,29)
+ #include <linux/byteorder/swabb.h>
+ #else
+ #include <linux/swab.h>
