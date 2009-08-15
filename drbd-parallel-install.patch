@@ -1,0 +1,11 @@
+--- drbd-8.3.2/scripts/Makefile~	2009-06-25 12:21:54.000000000 +0200
++++ drbd-8.3.2/scripts/Makefile	2009-08-15 13:42:56.765765927 +0200
+@@ -135,7 +135,7 @@
+ # e.g. if you build in some changeroot without access to the package database,
+ # or without udev installed.
+ # 
+-install-udev-rules:
++install-udev-rules: install-most
+ 	disable=.disabled ; \
+ 	v=$$(udevadm version 2>/dev/null) || \
+ 	v=$$(rpm -q --qf '%{VERSION}' udev 2>/dev/null) || \
