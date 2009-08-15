@@ -36,7 +36,7 @@ Source0:	http://oss.linbit.com/drbd/8.3/%{pname}-%{version}.tar.gz
 # Source0-md5:	8aa8f7891d397ff25b7a3f77f56d353b
 Patch0:		%{pname}-Makefile.patch
 Patch1:		%{pname}-swab.patch
-Patch1:		%{pname}-parallel-install.patch
+Patch2:		%{pname}-parallel-install.patch
 URL:		http://www.drbd.org/
 %if %{with userspace}
 BuildRequires:	bison
