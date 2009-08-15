@@ -1,6 +1,9 @@
 #
 # TODO:
 #  - trigger to update drbd-8.2 config
+#  - warning: Installed (but unpackaged) file(s) found:
+#     /etc/xen/scripts/block-drbd
+#     /usr/lib/ocf/resource.d/linbit/drbd
 #
 # Conditional build:
 %bcond_without	dist_kernel	# allow non-distribution kernel
@@ -37,6 +40,7 @@ Source0:	http://oss.linbit.com/drbd/8.3/%{pname}-%{version}.tar.gz
 Patch0:		%{pname}-Makefile.patch
 Patch1:		%{pname}-swab.patch
 Patch2:		%{pname}-parallel-install.patch
+Patch3:		%{pname}-bash-completion-install.patch
 URL:		http://www.drbd.org/
 %if %{with userspace}
 BuildRequires:	bison
@@ -114,11 +118,25 @@ This package provides bash-completion for drbd.
 %description -n bash-completion-drbd -l pl.UTF-8
 Ten pakiet dostarcza bashowe uzupełnianie poleceń dla drbd.
 
+%package -n drbd-udev
+Summary:	udev rules for drbd kernel module
+Summary(pl.UTF-8):	Reguły udev dla modułów jądra Linuksa dla drbd
+Release:	%{rel}
+Group:		Base/Kernel
+Requires:	udev-core
+
+%description -n drbd-udev
+udev rules for drbd kernel module.
+
+%description -n drbd-udev -l pl.UTF-8
+Reguły udev dla modułu jądra Linuksa dla drbd.
+
 %prep
 %setup -q -n %{pname}-%{version}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 %if %{with userspace}
@@ -193,14 +211,20 @@ fi
 %attr(2754,root,haclient) /sbin/drbdmeta
 %attr(754,root,root) /etc/rc.d/init.d/drbd
 %attr(755,root,root) %{_sysconfdir}/ha.d/resource.d/drbddisk
+%attr(755,root,root) %{_sysconfdir}/ha.d/resource.d/drbdupper
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/drbd.conf
 %{_mandir}/man[58]/*
 %dir /usr/lib/drbd
 %attr(755,root,root) /usr/lib/drbd/*
+%attr(755,root,root) %{_sbindir}/drbd-overview
 
 %files -n bash-completion-drbd
 %defattr(644,root,root,755)
 /etc/bash_completion.d/drbdadm
+
+%files -n drbd-udev
+%defattr(644,root,root,755)
+%config(noreplace) %verify(not md5 mtime size) /etc/udev/rules.d/65-drbd.rules
 %endif
 
 %if %{with kernel}
