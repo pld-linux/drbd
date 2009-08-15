@@ -166,6 +166,7 @@ install -d $RPM_BUILD_ROOT{/sbin,%{_mandir}/man{5,8},%{_sysconfdir}} \
 
 %if %{with userspace}
 %{__make} install -C scripts \
+	DRBD_ENABLE_UDEV=1 \
 	PREFIX=$RPM_BUILD_ROOT
 install scripts/drbd $RPM_BUILD_ROOT/etc/rc.d/init.d
 rm -rf $RPM_BUILD_ROOT/etc/init.d
