@@ -23,7 +23,7 @@
 %undefine	with_userspace
 %endif
 
-%define		_rel	0.1
+%define		_rel	1
 %define		pname	drbd
 Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl.UTF-8):	drbd jest urządzeniem blokowym dla klastrów o wysokiej niezawodności
@@ -35,6 +35,7 @@ Group:		Base/Kernel
 Source0:	http://oss.linbit.com/drbd/8.3/%{pname}-%{version}.tar.gz
 # Source0-md5:	8aa8f7891d397ff25b7a3f77f56d353b
 Patch0:		%{pname}-Makefile.patch
+Patch1:		%{pname}-swab.patch
 URL:		http://www.drbd.org/
 %if %{with userspace}
 BuildRequires:	bison
@@ -115,6 +116,7 @@ Ten pakiet dostarcza bashowe uzupełnianie poleceń dla drbd.
 %prep
 %setup -q -n %{pname}-%{version}
 %patch0 -p1
+%patch1 -p1
 
 %build
 %if %{with userspace}
