@@ -26,7 +26,7 @@
 %undefine	with_userspace
 %endif
 
-%define		_rel	2
+%define		_rel	3
 %define		pname	drbd
 Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl.UTF-8):	drbd jest urządzeniem blokowym dla klastrów o wysokiej niezawodności
@@ -160,7 +160,7 @@ install -d $RPM_BUILD_ROOT{/sbin,%{_mandir}/man{5,8},%{_sysconfdir}} \
 	$RPM_BUILD_ROOT{/etc/rc.d/init.d,/etc/ha.d/resource.d}
 
 %if %{with kernel}
-%install_kernel_modules -m drbd/drbd -d block
+%install_kernel_modules -m drbd/drbd -d kernel/drivers/block
 %endif
 
 %if %{with userspace}
