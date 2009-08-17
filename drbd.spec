@@ -26,13 +26,13 @@
 %undefine	with_userspace
 %endif
 
-%define		_rel	4
+%define		rel	4
 %define		pname	drbd
 Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl.UTF-8):	drbd jest urządzeniem blokowym dla klastrów o wysokiej niezawodności
 Name:		%{pname}%{_alt_kernel}
 Version:	8.3.2
-Release:	%{_rel}
+Release:	%{rel}
 License:	GPL
 Group:		Base/Kernel
 Source0:	http://oss.linbit.com/drbd/8.3/%{pname}-%{version}.tar.gz
@@ -90,7 +90,7 @@ Narzędzie konfiguracyjne i skrypty startowe dla DRBD.
 %package -n kernel%{_alt_kernel}-block-drbd
 Summary:	Kernel module with drbd - a block device designed to build high availibility clusters
 Summary(pl.UTF-8):	Moduł jądra do drbd - urządzenia blokowego dla klastrów o wysokiej niezawodności
-Release:	%{_rel}@%{_kernel_ver_str}
+Release:	%{rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 %{?with_dist_kernel:%requires_releq_kernel}
 Requires(post,postun):	/sbin/depmod
