@@ -37,9 +37,6 @@ License:	GPL
 Group:		Base/Kernel
 Source0:	http://oss.linbit.com/drbd/8.3/%{pname}-%{version}rc2.tar.gz
 # Source0-md5:	642b857575d87f598c63775f48e34777
-Patch0:		%{pname}-Makefile.patch
-Patch1:		%{pname}-swab.patch
-Patch2:		%{pname}-parallel-install.patch
 URL:		http://www.drbd.org/
 %if %{with userspace}
 BuildRequires:	bison
@@ -131,9 +128,6 @@ Reguły udev dla modułu jądra Linuksa dla drbd.
 
 %prep
 %setup -q -n %{pname}-%{version}rc2
-#%patch0 -p1
-#%patch1 -p1
-#%patch2 -p1
 
 %build
 %configure
