@@ -26,17 +26,17 @@
 %undefine	with_userspace
 %endif
 
-%define		rel	11
+%define		rel	1
 %define		pname	drbd
 Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl.UTF-8):	drbd jest urządzeniem blokowym dla klastrów o wysokiej niezawodności
 Name:		%{pname}%{_alt_kernel}
-Version:	8.3.5
-Release:	%{rel}
+Version:	8.3.7
+Release:	0.rc2.%{rel}
 License:	GPL
 Group:		Base/Kernel
-Source0:	http://oss.linbit.com/drbd/8.3/%{pname}-%{version}.tar.gz
-# Source0-md5:	2a27a6924146ccd61e11e3a973707069
+Source0:	http://oss.linbit.com/drbd/8.3/%{pname}-%{version}rc2.tar.gz
+# Source0-md5:	642b857575d87f598c63775f48e34777
 Patch0:		%{pname}-Makefile.patch
 Patch1:		%{pname}-swab.patch
 Patch2:		%{pname}-parallel-install.patch
@@ -130,12 +130,13 @@ udev rules for drbd kernel module.
 Reguły udev dla modułu jądra Linuksa dla drbd.
 
 %prep
-%setup -q -n %{pname}-%{version}
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
+%setup -q -n %{pname}-%{version}rc2
+#%patch0 -p1
+#%patch1 -p1
+#%patch2 -p1
 
 %build
+%configure
 %if %{with userspace}
 %{__make} tools \
 	KVER=dummy \
@@ -164,7 +165,8 @@ install -d $RPM_BUILD_ROOT{/sbin,%{_mandir}/man{5,8},%{_sysconfdir}} \
 %if %{with userspace}
 %{__make} install -C scripts \
 	DRBD_ENABLE_UDEV=1 \
-	PREFIX=$RPM_BUILD_ROOT
+	DESTDIR=$RPM_BUILD_ROOT
+
 install scripts/drbd $RPM_BUILD_ROOT/etc/rc.d/init.d
 rm -rf $RPM_BUILD_ROOT/etc/init.d
 install user/{drbdadm,drbdmeta,drbdsetup} $RPM_BUILD_ROOT/sbin
