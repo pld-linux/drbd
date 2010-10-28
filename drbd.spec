@@ -138,9 +138,9 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/drbd
 %attr(755,root,root) %{_sysconfdir}/ha.d/resource.d/drbddisk
 %attr(755,root,root) %{_sysconfdir}/ha.d/resource.d/drbdupper
-%attr(750,root,root) %dir %{_sysconfdir}/drbd.d
-%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/drbd.conf
-%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/drbd.d/global_common.conf
+%dir %{_sysconfdir}/drbd.d
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/drbd.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/drbd.d/global_common.conf
 %{_mandir}/man[58]/*
 %dir /usr/lib/drbd
 %attr(755,root,root) /usr/lib/drbd/*
