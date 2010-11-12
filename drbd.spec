@@ -10,7 +10,7 @@ Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl.UTF-8):	drbd jest urządzeniem blokowym dla klastrów o wysokiej niezawodności
 Name:		drbd
 Version:	8.3.9
-Release:	1
+Release:	2
 License:	GPL
 Group:		Base/Kernel
 Source0:	http://oss.linbit.com/drbd/8.3/%{name}-%{version}.tar.gz
@@ -96,7 +96,8 @@ Reguły udev dla modułu jądra Linuksa dla drbd.
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/sbin,%{_mandir}/man{5,8},%{_sysconfdir}} \
-	$RPM_BUILD_ROOT{/etc/rc.d/init.d,/etc/ha.d/resource.d}
+	$RPM_BUILD_ROOT{/etc/rc.d/init.d,/etc/ha.d/resource.d} \
+	$RPM_BUILD_ROOT/var/lib/drbd
 
 %{__make} install -C scripts \
 	DRBD_ENABLE_UDEV=1 \
@@ -145,6 +146,7 @@ fi
 %dir /usr/lib/drbd
 %attr(755,root,root) /usr/lib/drbd/*
 %attr(755,root,root) %{_sbindir}/drbd-overview
+%attr(750,root,root) %dir /var/lib/drbd
 
 %files -n bash-completion-drbd
 %defattr(644,root,root,755)
