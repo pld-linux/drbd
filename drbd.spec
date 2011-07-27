@@ -3,14 +3,13 @@
 #  - trigger to update drbd-8.2 config
 #  - warning: Installed (but unpackaged) file(s) found:
 #     /etc/xen/scripts/block-drbd
-#     /usr/lib/ocf/resource.d/linbit/drbd
 #
 
 Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl.UTF-8):	drbd jest urządzeniem blokowym dla klastrów o wysokiej niezawodności
 Name:		drbd
 Version:	8.3.11
-Release:	2
+Release:	3
 License:	GPL
 Group:		Base/Kernel
 Source0:	http://oss.linbit.com/drbd/8.3/%{name}-%{version}.tar.gz
@@ -57,6 +56,15 @@ Setup tool and init scripts for DRBD.
 
 %description -n drbdsetup -l pl.UTF-8
 Narzędzie konfiguracyjne i skrypty startowe dla DRBD.
+
+%package -n resource-agents-drbd
+Summary:	DRBD resource agents for a cluster setup
+Group:		Daemons
+Requires:	heartbeat
+Requires:	resource-agents
+
+%description -n resource-agents-drbd
+DRBD resource agents for a cluster setup.
 
 %package -n bash-completion-drbd
 Summary:	bash-completion for drbd
@@ -137,10 +145,6 @@ fi
 %attr(4754,root,haclient) /sbin/drbdsetup
 %attr(4754,root,haclient) /sbin/drbdmeta
 %attr(754,root,root) /etc/rc.d/init.d/drbd
-%dir %{_sysconfdir}/ha.d
-%dir %{_sysconfdir}/ha.d/resource.d
-%attr(755,root,root) %{_sysconfdir}/ha.d/resource.d/drbddisk
-%attr(755,root,root) %{_sysconfdir}/ha.d/resource.d/drbdupper
 %dir %{_sysconfdir}/drbd.d
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/drbd.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/drbd.d/global_common.conf
@@ -149,6 +153,13 @@ fi
 %attr(755,root,root) /usr/lib/drbd/*
 %attr(755,root,root) %{_sbindir}/drbd-overview
 %attr(750,root,root) %dir /var/lib/drbd
+
+%files -n resource-agents-drbd
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_sysconfdir}/ha.d/resource.d/drbddisk
+%attr(755,root,root) %{_sysconfdir}/ha.d/resource.d/drbdupper
+%dir /usr/lib/ocf/resource.d/linbit
+%attr(755,root,root) /usr/lib/ocf/resource.d/linbit/*
 
 %files -n bash-completion-drbd
 %defattr(644,root,root,755)
