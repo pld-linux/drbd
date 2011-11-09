@@ -1,4 +1,3 @@
-#
 # TODO:
 #  - trigger to update drbd-8.2 config
 #  - warning: Installed (but unpackaged) file(s) found:
@@ -20,6 +19,7 @@ URL:		http://www.drbd.org/
 BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	rpmbuild(macros) >= 1.379
+BuildRequires:	udev-core
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -84,7 +84,6 @@ Ten pakiet dostarcza bashowe uzupełnianie poleceń dla drbd.
 Summary:	udev rules for drbd kernel module
 Summary(pl.UTF-8):	Reguły udev dla modułów jądra Linuksa dla drbd
 Group:		Base/Kernel
-BuildRequires:	udev-core
 Requires:	udev-core
 
 %description -n drbd-udev
