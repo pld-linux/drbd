@@ -3,6 +3,8 @@
 #  - trigger to update drbd-8.2 config
 #  - warning: Installed (but unpackaged) file(s) found:
 #     /etc/xen/scripts/block-drbd
+#  - add some provides/requires to keep in sync with kernel releases
+#    Linux 3.0.8 got drbd module version 8.3.11
 #
 
 Summary:	drbd is a block device designed to build high availibility clusters
@@ -82,6 +84,7 @@ Ten pakiet dostarcza bashowe uzupełnianie poleceń dla drbd.
 Summary:	udev rules for drbd kernel module
 Summary(pl.UTF-8):	Reguły udev dla modułów jądra Linuksa dla drbd
 Group:		Base/Kernel
+BuildRequires:	udev-core
 Requires:	udev-core
 
 %description -n drbd-udev
