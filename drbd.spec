@@ -9,12 +9,12 @@
 Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl.UTF-8):	drbd jest urządzeniem blokowym dla klastrów o wysokiej niezawodności
 Name:		drbd
-Version:	8.4.0
-Release:	2
+Version:	8.4.1
+Release:	1
 License:	GPL v2+
 Group:		Base/Kernel
 Source0:	http://oss.linbit.com/drbd/8.4/%{name}-%{version}.tar.gz
-# Source0-md5:	8519246dff4e2de14595d71abcd54db4
+# Source0-md5:	3af0cc49ee0b5005ea108c5ba92aa755
 URL:		http://www.drbd.org/
 BuildRequires:	bison
 BuildRequires:	flex
@@ -96,7 +96,9 @@ Reguły udev dla modułu jądra Linuksa dla drbd.
 %setup -q
 
 %build
-%configure
+%configure \
+	--with-initdir=/etc/rc.d/init.d
+
 %{__make} tools \
 	KVER=dummy \
 	CC="%{__cc}" \
@@ -109,16 +111,12 @@ install -d $RPM_BUILD_ROOT{/sbin,%{_mandir}/man{5,8},%{_sysconfdir}} \
 	$RPM_BUILD_ROOT{/etc/rc.d/init.d,/etc/ha.d/resource.d} \
 	$RPM_BUILD_ROOT/var/lib/drbd
 
-%{__make} install -C scripts \
+%{__make} install \
 	DRBD_ENABLE_UDEV=1 \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install scripts/drbd $RPM_BUILD_ROOT/etc/rc.d/init.d
-rm -rf $RPM_BUILD_ROOT/etc/init.d
-install user/{drbdadm,drbdmeta,drbdsetup} $RPM_BUILD_ROOT/sbin
-
-install documentation/*.5 $RPM_BUILD_ROOT%{_mandir}/man5
-install documentation/*.8 $RPM_BUILD_ROOT%{_mandir}/man8
+# let's keep legacy utils in /sbin
+mv $RPM_BUILD_ROOT/lib/drbd/drbd{adm,setup}-83 $RPM_BUILD_ROOT/sbin
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -146,6 +144,8 @@ fi
 %attr(755,root,root) /sbin/drbdadm
 %attr(4754,root,haclient) /sbin/drbdsetup
 %attr(4754,root,haclient) /sbin/drbdmeta
+%attr(755,root,root) /sbin/drbdadm-83
+%attr(755,root,root) /sbin/drbdsetup-83
 %attr(754,root,root) /etc/rc.d/init.d/drbd
 %dir %{_sysconfdir}/drbd.d
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/drbd.conf
