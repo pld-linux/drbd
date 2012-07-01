@@ -62,7 +62,6 @@ Narzędzie konfiguracyjne i skrypty startowe dla DRBD.
 %package -n resource-agents-drbd
 Summary:	DRBD resource agents for a cluster setup
 Group:		Daemons
-Requires:	heartbeat
 Requires:	resource-agents
 
 %description -n resource-agents-drbd
