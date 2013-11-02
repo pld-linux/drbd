@@ -1,25 +1,22 @@
 # TODO:
 #  - trigger to update drbd-8.2 config
-#  - warning: Installed (but unpackaged) file(s) found:
-#     /etc/xen/scripts/block-drbd
-#  - add some provides/requires to keep in sync with kernel releases
-#    Linux 3.0.8 got drbd module version 8.3.11
 #
 
 Summary:	drbd is a block device designed to build high availibility clusters
 Summary(pl.UTF-8):	drbd jest urządzeniem blokowym dla klastrów o wysokiej niezawodności
 Name:		drbd
-Version:	8.4.1
-Release:	2
+Version:	8.4.3
+Release:	1
 License:	GPL v2+
 Group:		Base/Kernel
 Source0:	http://oss.linbit.com/drbd/8.4/%{name}-%{version}.tar.gz
-# Source0-md5:	3af0cc49ee0b5005ea108c5ba92aa755
+# Source0-md5:	0c54a69603fa28b41de5fb33e03fd9e8
 URL:		http://www.drbd.org/
 BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	rpmbuild(macros) >= 1.379
 BuildRequires:	udev-core
+Requires:	uname(release) >= 3.10
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -49,8 +46,11 @@ Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(postun):	/usr/sbin/groupdel
 Requires:	rc-scripts
+Requires:	uname(release) >= 3.10
+Requires:	udev-core
 Provides:	group(haclient)
 Obsoletes:	drbdsetup8
+Obsoletes:	drbd-udev
 Conflicts:	drbdsetup24
 
 %description -n drbdsetup
@@ -79,17 +79,15 @@ This package provides bash-completion for drbd.
 %description -n bash-completion-drbd -l pl.UTF-8
 Ten pakiet dostarcza bashowe uzupełnianie poleceń dla drbd.
 
-%package -n drbd-udev
-Summary:	udev rules for drbd kernel module
-Summary(pl.UTF-8):	Reguły udev dla modułów jądra Linuksa dla drbd
-Group:		Base/Kernel
-Requires:	udev-core
+%package xen
+Summary:	Xen block device management script for DRBD
+Group:		Applications/System
+Requires:	drbdsetup = %{version}-%{release}
+Requires:	xen
 
-%description -n drbd-udev
-udev rules for drbd kernel module.
-
-%description -n drbd-udev -l pl.UTF-8
-Reguły udev dla modułu jądra Linuksa dla drbd.
+%description xen
+This package contains a Xen block device helper script for DRBD,
+capable of promoting and demoting DRBD resources as necessary.
 
 %prep
 %setup -q
@@ -154,6 +152,7 @@ fi
 %attr(755,root,root) /usr/lib/drbd/*
 %attr(755,root,root) %{_sbindir}/drbd-overview
 %attr(750,root,root) %dir /var/lib/drbd
+%config(noreplace) %verify(not md5 mtime size) /etc/udev/rules.d/65-drbd.rules
 
 %files -n resource-agents-drbd
 %defattr(644,root,root,755)
@@ -166,6 +165,6 @@ fi
 %defattr(644,root,root,755)
 /etc/bash_completion.d/drbdadm
 
-%files -n drbd-udev
+%files xen
 %defattr(644,root,root,755)
-%config(noreplace) %verify(not md5 mtime size) /etc/udev/rules.d/65-drbd.rules
+/etc/xen/scripts/block-drbd
