@@ -11,10 +11,11 @@ License:	GPL v2+
 Group:		Base/Kernel
 Source0:	http://oss.linbit.com/drbd/8.4/%{name}-%{version}.tar.gz
 # Source0-md5:	0c54a69603fa28b41de5fb33e03fd9e8
+Source1:	drbd.service
 URL:		http://www.drbd.org/
 BuildRequires:	bison
 BuildRequires:	flex
-BuildRequires:	rpmbuild(macros) >= 1.379
+BuildRequires:	rpmbuild(macros) >= 1.671
 BuildRequires:	udev-core
 Requires:	uname(release) >= 3.10
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -42,12 +43,14 @@ Summary(pl.UTF-8):	Narzędzie konfiguracyjne i skrypty dla DRBD
 Summary(pt_BR.UTF-8):	Utilitários para gerenciar dispositivos DRBD
 Group:		Applications/System
 Requires(post,preun):	/sbin/chkconfig
+Requires(post,preun,postun):	systemd-units >= 38
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(postun):	/usr/sbin/groupdel
 Requires:	rc-scripts
-Requires:	uname(release) >= 3.10
+Requires:	systemd-units >= 38
 Requires:	udev-core
+Requires:	uname(release) >= 3.10
 Provides:	group(haclient)
 Obsoletes:	drbdsetup8
 Obsoletes:	drbd-udev
@@ -106,11 +109,13 @@ capable of promoting and demoting DRBD resources as necessary.
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/sbin,%{_mandir}/man{5,8},%{_sysconfdir}} \
 	$RPM_BUILD_ROOT{/etc/rc.d/init.d,/etc/ha.d/resource.d} \
-	$RPM_BUILD_ROOT/var/lib/drbd
+	$RPM_BUILD_ROOT{/var/lib/drbd,%{systemdunitdir}}
 
 %{__make} install \
 	DRBD_ENABLE_UDEV=1 \
 	DESTDIR=$RPM_BUILD_ROOT
+
+install %{SOURCE1} $RPM_BUILD_ROOT%{systemdunitdir}/drbd.service
 
 # let's keep legacy utils in /sbin
 mv $RPM_BUILD_ROOT/lib/drbd/drbd{adm,setup}-83 $RPM_BUILD_ROOT/sbin
@@ -124,17 +129,23 @@ rm -rf $RPM_BUILD_ROOT
 %post -n drbdsetup
 /sbin/chkconfig --add drbd
 %service drbd restart
+%systemd_post drbd.service
 
 %preun -n drbdsetup
 if [ "$1" = "0" ]; then
 	%service drbd stop
 	/sbin/chkconfig --del drbd
 fi
+%systemd_preun drbd.service
 
 %postun -n drbdsetup
 if [ "$1" = "0" ]; then
 	%groupremove haclient
 fi
+%systemd_reload
+
+%triggerpostun -n drbdsetup -- drbdsetup < 8.4.3-1
+%systemd_trigger drbd.service
 
 %files -n drbdsetup
 %defattr(644,root,root,755)
@@ -144,6 +155,7 @@ fi
 %attr(755,root,root) /sbin/drbdadm-83
 %attr(755,root,root) /sbin/drbdsetup-83
 %attr(754,root,root) /etc/rc.d/init.d/drbd
+%{systemdunitdir}/drbd.service
 %dir %{_sysconfdir}/drbd.d
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/drbd.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/drbd.d/global_common.conf
