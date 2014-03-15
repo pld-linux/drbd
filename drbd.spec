@@ -75,6 +75,9 @@ Summary:	bash-completion for drbd
 Summary(pl.UTF-8):	Bashowe uzupełnianie poleceń dla drbd
 Group:		Applications/Shells
 Requires:	bash-completion
+%if "%{_rpmversion}" >= "5"
+BuildArch:	noarch
+%endif
 
 %description -n bash-completion-drbd
 This package provides bash-completion for drbd.
