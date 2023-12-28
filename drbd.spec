@@ -9,12 +9,14 @@ Version:	8.4.3
 Release:	1
 License:	GPL v2+
 Group:		Base/Kernel
-Source0:	http://oss.linbit.com/drbd/8.4/%{name}-%{version}.tar.gz
+#Source0Download: https://linbit.com/linbit-software-download-page-for-linstor-and-drbd-linux-driver/
+Source0:	https://linbit.com/downloads/drbd/8.4/%{name}-%{version}.tar.gz
 # Source0-md5:	0c54a69603fa28b41de5fb33e03fd9e8
 Source1:	drbd.service
 URL:		http://www.drbd.org/
 BuildRequires:	bison
 BuildRequires:	flex
+BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.671
 BuildRequires:	udev-core
 Requires:	uname(release) >= 3.10
@@ -52,8 +54,8 @@ Requires:	systemd-units >= 38
 Requires:	udev-core
 Requires:	uname(release) >= 3.10
 Provides:	group(haclient)
-Obsoletes:	drbdsetup8
-Obsoletes:	drbd-udev
+Obsoletes:	drbdsetup8 < 9
+Obsoletes:	drbd-udev < 8.4.3
 Conflicts:	drbdsetup24
 
 %description -n drbdsetup
@@ -64,11 +66,15 @@ Narzędzie konfiguracyjne i skrypty startowe dla DRBD.
 
 %package -n resource-agents-drbd
 Summary:	DRBD resource agents for a cluster setup
+Summary(pl.UTF-8):	Agenci zasobów DRBD do instalacji klastrowych
 Group:		Daemons
 Requires:	resource-agents
 
 %description -n resource-agents-drbd
 DRBD resource agents for a cluster setup.
+
+%description -n resource-agents-drbd -l pl.UTF-8
+Agenci zasobów DRBD do instalacji klastrowych.
 
 %package -n bash-completion-drbd
 Summary:	bash-completion for drbd
@@ -85,6 +91,7 @@ Ten pakiet dostarcza bashowe uzupełnianie poleceń dla drbd.
 
 %package xen
 Summary:	Xen block device management script for DRBD
+Summary(pl.UTF-8):	Skrypt zarządzający urządzeniem blokowym Xen dla DRBD
 Group:		Applications/System
 Requires:	drbdsetup = %{version}-%{release}
 Requires:	xen
@@ -92,6 +99,10 @@ Requires:	xen
 %description xen
 This package contains a Xen block device helper script for DRBD,
 capable of promoting and demoting DRBD resources as necessary.
+
+%description xen -l pl.UTF-8
+Ten pakiet zawiera pomocniczy skrypt urządzenia blokowego Xen dla
+DRBD, potrafiący w razie potrzeby promować i degradować zasoby DRBD.
 
 %prep
 %setup -q
@@ -119,7 +130,7 @@ install -d $RPM_BUILD_ROOT{/sbin,%{_mandir}/man{5,8},%{_sysconfdir}} \
 install %{SOURCE1} $RPM_BUILD_ROOT%{systemdunitdir}/drbd.service
 
 # let's keep legacy utils in /sbin
-mv $RPM_BUILD_ROOT/lib/drbd/drbd{adm,setup}-83 $RPM_BUILD_ROOT/sbin
+%{__mv} $RPM_BUILD_ROOT/lib/drbd/drbd{adm,setup}-83 $RPM_BUILD_ROOT/sbin
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -160,7 +171,12 @@ fi
 %dir %{_sysconfdir}/drbd.d
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/drbd.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/drbd.d/global_common.conf
-%{_mandir}/man[58]/*
+%{_mandir}/man5/drbd.conf.5*
+%{_mandir}/man8/drbd.8*
+%{_mandir}/man8/drbdadm.8*
+%{_mandir}/man8/drbddisk.8*
+%{_mandir}/man8/drbdmeta.8*
+%{_mandir}/man8/drbdsetup.8*
 %dir /usr/lib/drbd
 %attr(755,root,root) /usr/lib/drbd/*
 %attr(755,root,root) %{_sbindir}/drbd-overview
